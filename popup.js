@@ -6,61 +6,64 @@ if (!chrome.cookies) {
   chrome.cookies = chrome.experimental.cookies;
 }
 
-// A simple Timer class.
-function Timer() {
-  this.start_ = new Date();
+var login_url = 'https://swgjazz.ibm.com:8017/jazz/service/com.ibm.team.repository.service.internal.webuiInitializer.IWebUIInitializerRestService/j_security_check';
+var url = 'https://swgjazz.ibm.com:8017/jazz/service/com.ibm.team.workitem.common.internal.rest.IQueryRestService/getResultSet';
+var post_field = 'startIndex=0&maxResults=10&filterAttribute=&filterValue=&itemId=_Cz0GAKtmEeSDqq9AqL5DVg&projectAreaItemId=_TpqD8FSeEeCF6b5qT5IShg&jsonQuery={"name":"Copy of 2.2 Unresolved Defects - Found in R3","description":"","itemId":"_Cz0GAKtmEeSDqq9AqL5DVg","csvExportLink":"/jazz/resource/itemOid/com.ibm.team.workitem.query.QueryDescriptor/_Cz0GAKtmEeSDqq9AqL5DVg?_mediaType=text/csv","htmlExportLink":"/jazz/resource/itemOid/com.ibm.team.workitem.query.QueryDescriptor/_Cz0GAKtmEeSDqq9AqL5DVg?_mediaType=text/html","projectAreaItemId":"_TpqD8FSeEeCF6b5qT5IShg"}';
+var refer = 'https://swgjazz.ibm.com:8017/jazz/web/projects/Social%20CRM%20-%20Sales%20Force%20Automation';
 
-  this.elapsed = function() {
-    return (new Date()) - this.start_;
-  }
-
-  this.reset = function() {
-    this.start_ = new Date();
-  }
-}
+chrome.webRequest.onBeforeSendHeaders.addListener(
+    function(details) {
+        if (details.type === 'xmlhttprequest') {
+          details.requestHeaders.push({ name: 'Referer', value: refer});
+          return { requestHeaders: details.requestHeaders };
+        }
+    },
+    {urls: ['https://swgjazz.ibm.com:8017/*']},
+    ["blocking", "requestHeaders"]
+);
 
 function renderStatus(statusText) {
   document.getElementById('status').textContent = statusText;
 }
 
+function parseResultList(result) {
+    var items = result['soapenv:Body']['response']['returnValue']['value']['rows'];
+    console.log(items);
+    var notification = webkitNotifications.createNotification(
+      '48.png',  // icon url - can be relative
+      'Hello!',  // notification title
+      'Lorem ipsum...'  // notification body text
+    );
+}
+
+function getRTCList(cookies) {
+  var xmlhttp = new XMLHttpRequest();
+  var result;
+  xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+      parseResultList(JSON.parse(xmlhttp.responseText));
+    }
+  }
+  xmlhttp.open("POST",url,true);
+  xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded; charset=UTF-8");
+  xmlhttp.setRequestHeader("accept","text/json");
+  xmlhttp.send(post_field);
+}
+
 function onload() {
   // focusFilter();
-  var timer = new Timer();
-  chrome.cookies.getAll({}, function(cookies) {
+  var logined = false;
+  chrome.cookies.getAll({domain:'swgjazz.ibm.com'}, function(cookies) {
     // startListening();
-    start = new Date();
-    for (var i in cookies) {
-      console.log(cookies[i]);
-      // cache.add(cookies[i]);
-    }
-    timer.reset();
-    // reloadCookieTable();
+    console.log(cookies);
+    renderStatus('already login rtc');
+    getRTCList(cookies);
   });
+  renderStatus('error! please login rtc at first');
 }
 
 document.addEventListener('DOMContentLoaded', function() {
   renderStatus('check rtc login status.....');
   onload();
-  // getCurrentTabUrl(function(url) {
-    // Put the image URL in Google search.
-    // renderStatus('Performing Google Image search for ' + url);
-
-    // getImageUrl(url, function(imageUrl, width, height) {
-
-    //   renderStatus('Search term: ' + url + '\n' +
-    //       'Google image search result: ' + imageUrl);
-    //   var imageResult = document.getElementById('image-result');
-    //   // Explicitly set the width/height to minimize the number of reflows. For
-    //   // a single image, this does not matter, but if you're going to embed
-    //   // multiple external images in your page, then the absence of width/height
-    //   // attributes causes the popup to resize multiple times.
-    //   imageResult.width = width;
-    //   imageResult.height = height;
-    //   imageResult.src = imageUrl;
-    //   imageResult.hidden = false;
-
-    // }, function(errorMessage) {
-    //   renderStatus('Cannot display image. ' + errorMessage);
-    // });
-  // });
 });
