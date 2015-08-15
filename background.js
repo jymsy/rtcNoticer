@@ -9,7 +9,7 @@ var login_url = 'https://swgjazz.ibm.com:8017/jazz/service/com.ibm.team.reposito
 var url = 'https://swgjazz.ibm.com:8017/jazz/service/com.ibm.team.workitem.common.internal.rest.IQueryRestService/getResultSet';
 var post_field = 'startIndex=0&maxResults=5&filterAttribute=&filterValue=&itemId=_Cz0GAKtmEeSDqq9AqL5DVg&projectAreaItemId=_TpqD8FSeEeCF6b5qT5IShg&jsonQuery={"name":"Copy of 2.2 Unresolved Defects - Found in R3","description":"","itemId":"_Cz0GAKtmEeSDqq9AqL5DVg","csvExportLink":"/jazz/resource/itemOid/com.ibm.team.workitem.query.QueryDescriptor/_Cz0GAKtmEeSDqq9AqL5DVg?_mediaType=text/csv","htmlExportLink":"/jazz/resource/itemOid/com.ibm.team.workitem.query.QueryDescriptor/_Cz0GAKtmEeSDqq9AqL5DVg?_mediaType=text/html","projectAreaItemId":"_TpqD8FSeEeCF6b5qT5IShg"}';
 var refer = 'https://swgjazz.ibm.com:8017/jazz/web/projects/Social%20CRM%20-%20Sales%20Force%20Automation';
-
+var isActivated=false;
 chrome.webRequest.onBeforeSendHeaders.addListener(
     function(details) {
         if (details.type === 'xmlhttprequest') {
@@ -26,25 +26,38 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
   "Notification.requestPermission" beforehand).
 */
 function show(body) {
+
   var time = /(..)(:..)/.exec(new Date());     // The prettyprinted time.
   var hour = time[1] % 12 || 12;               // The prettyprinted hour.
   var period = time[1] < 12 ? 'a.m.' : 'p.m.'; // The period of the day.
-  new Notification(hour + time[2] + ' ' + period, {
-    icon: '48.png',
-    body: body
+  // new Notification(hour + time[2] + ' ' + period, {
+  //   icon: '48.png',
+  //   body: body
+  // });
+  var opt = {
+    type: "list",
+    title: hour + time[2] + ' ' + period,
+    message: "Primary message to display",
+    iconUrl: "48.png",
+    items: body
+  };
+  chrome.notifications.create((new Date()).valueOf(), opt, function(notificationId){
+    console.log('show notification');
   });
 }
 
 function parseResultList(result) {
     var items = result['soapenv:Body']['response']['returnValue']['value']['rows'];
     console.log(items);
-    var body='';
-    items.forEach(function(value, index){
-      body += value['labels'][1] + '\n';
-      body += value['labels'][2] + '\n';
-      body += value['labels'][5] + ' '+value['labels'][5]+'\n';
+    var body=[];
+    items.forEach(function(value, index) {
+      body.push({title:"ID", message:value['labels'][1]});
+      body.push({title:"Summary", message:value['labels'][2]});
+      body.push({title:"Priority & Severity", message:value['labels'][5] + '||'+value['labels'][6]});
+      body.push({title:"Modified Date", message:value['labels'][7]});
+      show(body);
     });
-    show(body);
+    
 }
 
 function getRTCList(cookies) {
@@ -64,11 +77,11 @@ function getRTCList(cookies) {
 
 function onload() {
   // Conditionally initialize the options.
-  if (!localStorage.isInitialized) {
-    localStorage.isActivated = true;   // The display activation.
-    localStorage.frequency = 1;        // The display frequency, in minutes.
-    localStorage.isInitialized = true; // The option initialization.
-  }
+  // if (!localStorage.isInitialized) {
+  //   localStorage.isActivated = true;   // The display activation.
+  //   localStorage.frequency = 1;        // The display frequency, in minutes.
+  //   localStorage.isInitialized = true; // The option initialization.
+  // }
 
   chrome.cookies.getAll({domain:'swgjazz.ibm.com'}, function(cookies) {
     // startListening();
@@ -76,13 +89,15 @@ function onload() {
     // Test for notification support.
     if (window.Notification) {
       // While activated, show notifications at the display frequency.
-      if (JSON.parse(localStorage.isActivated)) { getRTCList(cookies); }
+      if (isActivated) { getRTCList(cookies); }
 
       var interval = 0; // The display interval, in minutes.
 
       setInterval(function() {
-        interval++;
-        getRTCList(cookies);
+        interval++;console.log(interval);
+        if (isActivated) {
+            getRTCList(cookies);
+        }
       }, 60000);
     }    
   });
@@ -90,9 +105,26 @@ function onload() {
 }
 
 
-chrome.browserAction.onClicked.addListener(function(tab) {
-  console.log('onload');
-  onload();
-});
+// chrome.browserAction.onClicked.addListener(function(tab) {
+//   console.log('onload');
+//   onload();
+// });
+
+
+
+chrome.extension.onRequest.addListener(
+  function(request, sender, sendResponse) {
+    sendResponse({}); // snub them.
+    if (request.cmd == 'start' && !isActivated) {
+      isActivated = true;
+      onload();
+    } else if (request.cmd == 'stop'){
+      isActivated = false;
+    }
+    console.log('get request');
+    
+    
+  }
+);
 
 

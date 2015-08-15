@@ -1,32 +1,55 @@
 <!doctype html>
-	<html>
-	  <head>
-	    <title>Getting Started Extension's Popup</title>
-	    <style>
-	      body {
-	        min-width: 357px;
-	        overflow-x: hidden;
-	      }
-	
-	      img {
-	        margin: 5px;
-	        border: 2px solid black;
-	        vertical-align: middle;
-	        width: 75px;
-	        height: 75px;
-	      }
-	    </style>
-	
-	    <!--
-21	      - JavaScript and HTML must be in separate files: see our Content Security
-22	      - Policy documentation[1] for details and explanation.
-23	      -
-24	      - [1]: http://developer.chrome.com/extensions/contentSecurityPolicy.html
-25	     -->
-	    <script src="popup.js"></script>
-	  </head>
-	  <body>
-	  <div id="status"></div>
-    <img id="image-result" hidden>
-	  </body>
-	</html>
+<html>
+  <head>
+    <title>Set Page Color Popup</title>
+    <style>
+    body {
+      overflow: hidden;
+      margin: 0px;
+      padding: 0px;
+      background: white;
+    }
+
+    div:first-child {
+      margin-top: 0px;
+    }
+
+    div {
+      cursor: pointer;
+      text-align: center;
+      padding: 1px 3px;
+      font-family: sans-serif;
+      font-size: 0.8em;
+      width: 100px;
+      margin-top: 1px;
+      background: #cccccc;
+    }
+    div:hover {
+      background: #aaaaaa;
+    }
+    #red {
+      border: 1px solid red;
+      color: red;
+    }
+    #blue {
+      border: 1px solid blue;
+      color: blue;
+    }
+    #green {
+      border: 1px solid green;
+      color: green;
+    }
+    #yellow {
+      border: 1px solid yellow;
+      color: yellow;
+    }
+    </style>
+    <script src="popup.js"></script>
+  </head>
+  <body>
+    <div id="start">启动</div>
+    <div id="stop">停止</div>
+    <div id="1">1</div>
+    <div id="2">2</div>
+  </body>
+</html>
