@@ -40,7 +40,9 @@ function parseResultList(result) {
     console.log(items);
     var body='';
     items.forEach(function(value, index){
-      body += value['labels'][1] + ' ';
+      body += value['labels'][1] + '\n';
+      body += value['labels'][2] + '\n';
+      body += value['labels'][5] + ' '+value['labels'][5]+'\n';
     });
     show(body);
 }
@@ -84,7 +86,7 @@ function onload() {
       }, 60000);
     }    
   });
-  show('error!login rtc error! please login rtc again');
+  // show('error!login rtc error! please login rtc again');
 }
 
 
