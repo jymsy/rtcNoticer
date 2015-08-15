@@ -9,7 +9,10 @@ var login_url = 'https://swgjazz.ibm.com:8017/jazz/service/com.ibm.team.reposito
 var url = 'https://swgjazz.ibm.com:8017/jazz/service/com.ibm.team.workitem.common.internal.rest.IQueryRestService/getResultSet';
 var post_field = 'startIndex=0&maxResults=5&filterAttribute=&filterValue=&itemId=_Cz0GAKtmEeSDqq9AqL5DVg&projectAreaItemId=_TpqD8FSeEeCF6b5qT5IShg&jsonQuery={"name":"Copy of 2.2 Unresolved Defects - Found in R3","description":"","itemId":"_Cz0GAKtmEeSDqq9AqL5DVg","csvExportLink":"/jazz/resource/itemOid/com.ibm.team.workitem.query.QueryDescriptor/_Cz0GAKtmEeSDqq9AqL5DVg?_mediaType=text/csv","htmlExportLink":"/jazz/resource/itemOid/com.ibm.team.workitem.query.QueryDescriptor/_Cz0GAKtmEeSDqq9AqL5DVg?_mediaType=text/html","projectAreaItemId":"_TpqD8FSeEeCF6b5qT5IShg"}';
 var refer = 'https://swgjazz.ibm.com:8017/jazz/web/projects/Social%20CRM%20-%20Sales%20Force%20Automation';
-var isActivated=false;
+var isActivated = false;
+var isInitialized=false;
+var item_url = 'https://swgjazz.ibm.com:8017/jazz/web/projects/Social%20CRM%20-%20Sales%20Force%20Automation#action=com.ibm.team.workitem.viewWorkItem&id=';
+
 chrome.webRequest.onBeforeSendHeaders.addListener(
     function(details) {
         if (details.type === 'xmlhttprequest') {
@@ -25,7 +28,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
   permission in the manifest file (or calling
   "Notification.requestPermission" beforehand).
 */
-function show(body) {
+function show(body,id) {
 
   var time = /(..)(:..)/.exec(new Date());     // The prettyprinted time.
   var hour = time[1] % 12 || 12;               // The prettyprinted hour.
@@ -39,28 +42,55 @@ function show(body) {
     title: hour + time[2] + ' ' + period,
     message: "Primary message to display",
     iconUrl: "48.png",
-    items: body
+    items: body,
+    buttons: [{title:'去看看'}]
   };
-  chrome.notifications.create((new Date()).valueOf(), opt, function(notificationId){
+  chrome.notifications.create((new Date()).valueOf()+':'+id, opt, function(notificationId){
     console.log('show notification');
   });
+}
+
+function showNotice(value,date){
+  var body = [];
+        body.push({title:"ID", message:value['labels'][1]});
+        body.push({title:"Summary", message:value['labels'][2]});
+        body.push({title:"Priority & Severity", message:value['labels'][5] + ' | '+value['labels'][6]});
+
+        date = new Date(date).toLocaleString();
+        body.push({title:"Modified Date", message:date});
+        show(body, value['labels'][1]);
 }
 
 function parseResultList(result) {
     var items = result['soapenv:Body']['response']['returnValue']['value']['rows'];
     console.log(items);
-    var body=[];
+    var lastDate=0;
     items.forEach(function(value, index) {
-      body.push({title:"ID", message:value['labels'][1]});
-      body.push({title:"Summary", message:value['labels'][2]});
-      body.push({title:"Priority & Severity", message:value['labels'][5] + '||'+value['labels'][6]});
-      body.push({title:"Modified Date", message:value['labels'][7]});
-      show(body);
+      var date = parseInt(value['labels'][7]);
+      if (localStorage.lastItemDate == 1) {
+        if (date > lastDate) {
+          lastDate = date;
+        }
+        showNotice(value,date);
+
+      } else if(date > localStorage.lastItemDate) {
+        localStorage.lastItemDate = date;
+        showNotice(value,date);
+      }
+
+
     });
+    if (localStorage.lastItemDate == 1) {
+      localStorage.lastItemDate = lastDate;
+    }
     
 }
 
 function getRTCList(cookies) {
+  if (!localStorage.lastItemDate) {
+    localStorage.lastItemDate = 1;
+  }
+
   var xmlhttp = new XMLHttpRequest();
   var result;
   xmlhttp.onreadystatechange = function() {
@@ -110,18 +140,29 @@ function onload() {
 //   onload();
 // });
 
+chrome.notifications.onClicked.addListener(function(notificationId){
+  chrome.notifications.clear(notificationId);
+});
 
+chrome.notifications.onButtonClicked.addListener(function(notificationId,buttonIndex){
+  chrome.notifications.clear(notificationId);
+  var id = /.*:(.*)/.exec(notificationId)[1];
+  chrome.tabs.create({url:item_url+id});
+});
 
 chrome.extension.onRequest.addListener(
   function(request, sender, sendResponse) {
     sendResponse({}); // snub them.
     if (request.cmd == 'start' && !isActivated) {
       isActivated = true;
-      onload();
+      if (!isInitialized) {
+        isInitialized = true;
+        onload();
+      }
     } else if (request.cmd == 'stop'){
       isActivated = false;
     }
-    console.log('get request');
+    console.log('get request:'+request.cmd);
     
     
   }
