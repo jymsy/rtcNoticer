@@ -1,7 +1,7 @@
 {
   "name" : "rtcNoticer",
   "version" : "0.1",
-  "description" : "Testing Cookie API",
+  "description" : "RTC defect noticer",
   "permissions": [
     "cookies", "tabs", "http://*/*", "https://*/*","notifications","webRequest", "webRequestBlocking"
     ],
