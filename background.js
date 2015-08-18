@@ -74,15 +74,15 @@ function parseResultList(result) {
         showNotice(value,date);
 
       } else if(date > localStorage.lastItemDate) {
-        localStorage.lastItemDate = date;
+        lastDate = date;
         showNotice(value,date);
       }
 
 
     });
-    if (localStorage.lastItemDate == 1) {
+    // if (localStorage.lastItemDate == 1) {
       localStorage.lastItemDate = lastDate;
-    }
+    // }
     
 }
 
@@ -106,13 +106,6 @@ function getRTCList(cookies) {
 }
 
 function onload() {
-  // Conditionally initialize the options.
-  // if (!localStorage.isInitialized) {
-  //   localStorage.isActivated = true;   // The display activation.
-  //   localStorage.frequency = 1;        // The display frequency, in minutes.
-  //   localStorage.isInitialized = true; // The option initialization.
-  // }
-
   chrome.cookies.getAll({domain:'swgjazz.ibm.com'}, function(cookies) {
     // startListening();
     console.log(cookies);
