@@ -80,9 +80,9 @@ function parseResultList(result) {
 
 
     });
-    // if (localStorage.lastItemDate == 1) {
+    if (lastDate != 0) {
       localStorage.lastItemDate = lastDate;
-    // }
+    }
     
 }
 
