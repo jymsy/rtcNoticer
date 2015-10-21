@@ -30,4 +30,5 @@ window.addEventListener('load', function() {
   options.frequency.onchange = function() {
     localStorage.frequency = options.frequency.value;
   };
+
 });
