@@ -67,18 +67,12 @@ function parseResultList(result) {
     var lastDate=0;
     items.forEach(function(value, index) {
       var date = parseInt(value['labels'][7]);
-      if (localStorage.lastItemDate == 1) {
+      if (localStorage.lastItemDate == 1 || date > localStorage.lastItemDate) {
         if (date > lastDate) {
           lastDate = date;
         }
         showNotice(value,date);
-
-      } else if(date > localStorage.lastItemDate) {
-        lastDate = date;
-        showNotice(value,date);
       }
-
-
     });
     if (lastDate != 0) {
       localStorage.lastItemDate = lastDate;
