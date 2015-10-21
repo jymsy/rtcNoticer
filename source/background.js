@@ -108,14 +108,16 @@ function onload() {
       // While activated, show notifications at the display frequency.
       if (isActivated) { getRTCList(cookies); }
 
-      var interval = 0; // The display interval, in minutes.
+      var interval = 0; // The display interval, in seconds.
 
       setInterval(function() {
-        interval++;console.log(interval);
-        if (isActivated) {
+        interval++;
+        // console.log(interval);
+        if (isActivated && localStorage.frequency <= interval) {
+            interval = 0;
             getRTCList(cookies);
         }
-      }, 60000);
+      }, 1000);
     }    
   });
   // show('error!login rtc error! please login rtc again');
@@ -136,6 +138,10 @@ chrome.notifications.onButtonClicked.addListener(function(notificationId,buttonI
   var id = /.*:(.*)/.exec(notificationId)[1];
   chrome.tabs.create({url:item_url+id});
 });
+
+if (!localStorage.frequency) {
+    localStorage.frequency = 60;
+}
 
 chrome.extension.onRequest.addListener(
   function(request, sender, sendResponse) {
