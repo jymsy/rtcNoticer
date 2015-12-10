@@ -18,9 +18,9 @@ window.addEventListener('load', function() {
   //                                        // The display activation.
   options.frequency.value = localStorage.frequency;
                                          // The display frequency, in seconds.
-
   // if (!options.isActivated.checked) { ghost(true); }
-
+  console.log(options.filter);
+  options.filter.value = {"name":"2","value":"dkfjsd"};
   // Set the display activation and frequency.
   // options.isActivated.onchange = function() {
   //   localStorage.isActivated = options.isActivated.checked;
