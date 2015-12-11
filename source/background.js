@@ -7,7 +7,8 @@ if (!chrome.cookies) {
 
 var login_url = 'https://swgjazz.ibm.com:8017/jazz/service/com.ibm.team.repository.service.internal.webuiInitializer.IWebUIInitializerRestService/j_security_check';
 var url = 'https://swgjazz.ibm.com:8017/jazz/service/com.ibm.team.workitem.common.internal.rest.IQueryRestService/getResultSet';
-var post_field = 'startIndex=0&maxResults=5&filterAttribute=&filterValue=&itemId=_Rxcb4I8rEeSN-dPMeJF_tQ&projectAreaItemId=_TpqD8FSeEeCF6b5qT5IShg&jsonQuery={"name":"Copy of 2.2 Unresolved Defects - Found in R3.1","description":"","itemId":"_Rxcb4I8rEeSN-dPMeJF_tQ","projectAreaItemId":"_TpqD8FSeEeCF6b5qT5IShg"}';
+var post_field = 'startIndex=0&maxResults=5&filterAttribute=&filterValue=&itemId=_Rxcb4I8rEeSN-dPMeJF_tQ';
+// var post_field = 'startIndex=0&maxResults=5&filterAttribute=&filterValue=&itemId=_Rxcb4I8rEeSN-dPMeJF_tQ&projectAreaItemId=_TpqD8FSeEeCF6b5qT5IShg';
 var refer = 'https://swgjazz.ibm.com:8017/jazz/web/projects/Social%20CRM%20-%20Sales%20Force%20Automation';
 var isActivated = false;
 var isInitialized=false;
@@ -140,7 +141,14 @@ chrome.notifications.onButtonClicked.addListener(function(notificationId,buttonI
 });
 
 if (!localStorage.frequency) {
-    localStorage.frequency = 60;
+  localStorage.frequency = 60;
+}
+
+if (!localStorage.filter) {
+  var defaultFilter = [
+    {name:"Copy of 2.2 Unresolved Defects - Found in R3.1",id:"_Rxcb4I8rEeSN-dPMeJF_tQ"}
+  ];
+  localStorage.filter=JSON.stringify(defaultFilter);
 }
 
 chrome.extension.onRequest.addListener(

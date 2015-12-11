@@ -19,8 +19,18 @@ window.addEventListener('load', function() {
   options.frequency.value = localStorage.frequency;
                                          // The display frequency, in seconds.
   // if (!options.isActivated.checked) { ghost(true); }
-  console.log(options.filter);
-  options.filter.value = {"name":"2","value":"dkfjsd"};
+  // options.filter.value = {"name":"2","value":"dkfjsd"};
+  var currentFilter = JSON.parse(localStorage.filter);
+  var filterTable = document.querySelector('#filter tbody');
+
+  currentFilter.forEach(function(item) {
+    var filter = document.createElement("tr");
+    filter.innerHTML = "<td>"+item.name+"</td><td>"+item.id+"</td>";
+    filterTable.appendChild(filter);
+  });
+
+
+
   // Set the display activation and frequency.
   // options.isActivated.onchange = function() {
   //   localStorage.isActivated = options.isActivated.checked;

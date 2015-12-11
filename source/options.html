@@ -1,7 +1,8 @@
 
 <!doctype html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="utf-8">
     <title>RTC Notification</title>
     <link href="style.css" rel="stylesheet" type="text/css">
     <script src="jquery-2.1.4.min.js"></script>
@@ -24,17 +25,16 @@
         <option>60</option>
       </select>
       second(s).<br/>
-      <section name="filter" style="display:none"></section>
       <section>
         filter:
-        <table>
+        <table id="filter">
             <thead>
                 <tr>
                     <th>name</th>
                     <th>url</th>
                 </tr>
             </thead>
-
+            <tbody></tbody>
         </table>
       </section>
 
