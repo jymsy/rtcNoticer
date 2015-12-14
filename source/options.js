@@ -16,7 +16,9 @@ window.addEventListener('load', function() {
   // Initialize the option controls.
   // options.isActivated.checked = JSON.parse(localStorage.isActivated);
   //                                        // The display activation.
-  options.frequency.value = localStorage.frequency;
+  // options.frequency.value = localStorage.frequency;
+  var freq = document.querySelector('#frequency');
+  freq.value = localStorage.frequency;
                                          // The display frequency, in seconds.
   // if (!options.isActivated.checked) { ghost(true); }
   // options.filter.value = {"name":"2","value":"dkfjsd"};
@@ -25,20 +27,30 @@ window.addEventListener('load', function() {
 
   currentFilter.forEach(function(item) {
     var filter = document.createElement("tr");
-    filter.innerHTML = "<td>"+item.name+"</td><td>"+item.id+"</td>";
+    filter.innerHTML = "<td>"+item.name+"</td><td>"+item.id+"</td><td><button name='delete'>Delete</button></td>";
     filterTable.appendChild(filter);
   });
 
 
+  document.querySelector('#add').addEventListener('click', function() {
+    var name = document.getElementById("name").value;
+    var id = document.getElementById("id").value;
 
+    if (name != "" && id != "") {
+        var currentFilter = JSON.parse(localStorage.filter);
+        currentFilter.push({name: name, id:id});
+        localStorage.filter = JSON.stringify(currentFilter);
+    }
+
+  });
   // Set the display activation and frequency.
   // options.isActivated.onchange = function() {
   //   localStorage.isActivated = options.isActivated.checked;
   //   ghost(!options.isActivated.checked);
   // };
 
-  options.frequency.onchange = function() {
-    localStorage.frequency = options.frequency.value;
+  freq.onchange = function() {
+    localStorage.frequency = freq.value;
   };
 
 });

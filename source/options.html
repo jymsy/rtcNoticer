@@ -17,30 +17,34 @@
     </div>
 
     <h2>Options</h2>
-    <form id="options">
+    <div id="options">
       Check new defects every
-      <select name="frequency">
+      <select id="frequency">
         <option>10</option>
         <option>30</option>
         <option>60</option>
       </select>
       second(s).<br/>
       <section>
-        filter:
+        Current filters:
         <table id="filter">
             <thead>
                 <tr>
                     <th>name</th>
-                    <th>url</th>
+                    <th>id</th>
+                    <th>actions</th>
                 </tr>
             </thead>
             <tbody></tbody>
         </table>
       </section>
-
-      Add filter: <input type="text" style="width:200px">
+      Add filter:
+      <div>
+      name: <input id="name" type="text" style="width:200px">   id:<input id="id" type="text" style="width:200px">
+      <button id="add">Add</button>
+      </div>
       
-    </form>
-    <button name="add">Add</button>
+    </div>
+    
   </body>
 </html>
