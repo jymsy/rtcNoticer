@@ -14,7 +14,14 @@
 
 function reloadFilter() {
     var currentFilter = JSON.parse(localStorage.filter);
-    var filterTable = document.querySelector('#filter tbody');
+    var filterTable = document.querySelector('#filter tbody');  
+    var targets = document.querySelectorAll('.delete');
+    
+    if (targets.length > 0) {
+        for (var i = targets.length - 1; i >= 0; i--) {
+            targets[i].removeEventListener('click');
+        }
+    }
     filterTable.innerHTML="";
 
     currentFilter.forEach(function(item) {
@@ -22,16 +29,23 @@ function reloadFilter() {
         filter.innerHTML = "<td>"+item.name+"</td><td>"+item.id+"</td><td><button class='delete'>Delete</button></td>";
         filterTable.appendChild(filter);
     });
+
+    if (targets.length == 0) {
+        targets = document.querySelectorAll('.delete');
+    }
+
+    for (var i = targets.length - 1; i >= 0; i--) {
+        targets[i].addEventListener('click', function() {
+            console.log("click");
+        });
+    }
+    
 }
+
 
 function removeFilter(filterId) {
     var deleteIndex;
     var currentFilter = JSON.parse(localStorage.filter);
-    currentFilter.forEach(function(item) {
-        if (item.id == filterId) {
-
-        }
-    });
 
     for (var i = currentFilter.length - 1; i >= 0; i--) {
         if (currentFilter[i].id == filterId) {
@@ -70,9 +84,6 @@ window.addEventListener('load', function() {
     id.value = "";
   });
 
-    document.querySelector('.delete').addEventListener('click', function() {
-
-    });
   // Set the display activation and frequency.
   // options.isActivated.onchange = function() {
   //   localStorage.isActivated = options.isActivated.checked;
