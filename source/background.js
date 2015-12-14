@@ -7,7 +7,8 @@ if (!chrome.cookies) {
 
 var login_url = 'https://swgjazz.ibm.com:8017/jazz/service/com.ibm.team.repository.service.internal.webuiInitializer.IWebUIInitializerRestService/j_security_check';
 var url = 'https://swgjazz.ibm.com:8017/jazz/service/com.ibm.team.workitem.common.internal.rest.IQueryRestService/getResultSet';
-var post_field = 'startIndex=0&maxResults=5&filterAttribute=&filterValue=&itemId=_Rxcb4I8rEeSN-dPMeJF_tQ';
+var post_field = 'startIndex=0&maxResults=5&filterAttribute=&filterValue=&itemId=';
+// var post_field = 'startIndex=0&maxResults=5&filterAttribute=&filterValue=&itemId=_Rxcb4I8rEeSN-dPMeJF_tQ';
 // var post_field = 'startIndex=0&maxResults=5&filterAttribute=&filterValue=&itemId=_Rxcb4I8rEeSN-dPMeJF_tQ&projectAreaItemId=_TpqD8FSeEeCF6b5qT5IShg';
 var refer = 'https://swgjazz.ibm.com:8017/jazz/web/projects/Social%20CRM%20-%20Sales%20Force%20Automation';
 var isActivated = false;
@@ -62,13 +63,23 @@ function showNotice(value,date){
         show(body, value['labels'][1]);
 }
 
-function parseResultList(result) {
+function updateLastModifyDate(id, newDate) {
+    var currentFilter = JSON.parse(localStorage.filter);
+    currentFilter.forEach(function(filter) {
+        if (filter.id == id) {
+            filter.lastModifyDate = newDate;
+        }
+    });
+    localStorage.filter=JSON.stringify(currentFilter);
+}
+
+function parseResultList(result, filter) {
     var items = result['soapenv:Body']['response']['returnValue']['value']['rows'];
     console.log(items);
     var lastDate=0;
     items.forEach(function(value, index) {
       var date = parseInt(value['labels'][7]);
-      if (localStorage.lastItemDate == 1 || date > localStorage.lastItemDate) {
+      if (filter.lastModifyDate == 1 || date > filter.lastModifyDate) {
         if (date > lastDate) {
           lastDate = date;
         }
@@ -77,7 +88,20 @@ function parseResultList(result) {
     });
     if (lastDate != 0) {
       localStorage.lastItemDate = lastDate;
+      updateLastModifyDate(filter.id, lastDate);
     }
+    // items.forEach(function(value, index) {
+    //   var date = parseInt(value['labels'][7]);
+    //   if (localStorage.lastItemDate == 1 || date > localStorage.lastItemDate) {
+    //     if (date > lastDate) {
+    //       lastDate = date;
+    //     }
+    //     showNotice(value,date);
+    //   }
+    // });
+    // if (lastDate != 0) {
+    //   localStorage.lastItemDate = lastDate;
+    // }
     
 }
 
@@ -85,19 +109,23 @@ function getRTCList(cookies) {
   if (!localStorage.lastItemDate) {
     localStorage.lastItemDate = 1;
   }
+  var currentFilter = JSON.parse(localStorage.filter);
 
-  var xmlhttp = new XMLHttpRequest();
-  var result;
-  xmlhttp.onreadystatechange = function() {
-    if (xmlhttp.readyState==4 && xmlhttp.status==200)
-    {
-      parseResultList(JSON.parse(xmlhttp.responseText));
+  currentFilter.forEach(function(filter) {
+    var xmlhttp = new XMLHttpRequest();
+    var result;
+    xmlhttp.onreadystatechange = function() {
+      if (xmlhttp.readyState==4 && xmlhttp.status==200)
+      {
+        parseResultList(JSON.parse(xmlhttp.responseText), filter);
+      }
     }
-  }
-  xmlhttp.open("POST",url,true);
-  xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded; charset=UTF-8");
-  xmlhttp.setRequestHeader("accept","text/json");
-  xmlhttp.send(post_field);
+    xmlhttp.open("POST",url,true);
+    xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded; charset=UTF-8");
+    xmlhttp.setRequestHeader("accept","text/json");
+    xmlhttp.send(post_field+filter.id);
+  });
+
 }
 
 function onload() {
@@ -146,7 +174,7 @@ if (!localStorage.frequency) {
 
 if (!localStorage.filter) {
   var defaultFilter = [
-    {name:"Copy of 2.2 Unresolved Defects - Found in R3.1",id:"_Rxcb4I8rEeSN-dPMeJF_tQ"}
+    {name:"Copy of 2.2 Unresolved Defects - Found in R3.1",id:"_Rxcb4I8rEeSN-dPMeJF_tQ", lastModifyDate:1}
   ];
   localStorage.filter=JSON.stringify(defaultFilter);
 }

@@ -16,7 +16,7 @@ function reloadFilter() {
     var currentFilter = JSON.parse(localStorage.filter);
     var filterTable = document.querySelector('#filter tbody');  
     var targets = document.querySelectorAll('.delete');
-    
+
     if (targets.length > 0) {
         for (var i = targets.length - 1; i >= 0; i--) {
             targets[i].removeEventListener('click');
@@ -26,17 +26,16 @@ function reloadFilter() {
 
     currentFilter.forEach(function(item) {
         var filter = document.createElement("tr");
-        filter.innerHTML = "<td>"+item.name+"</td><td>"+item.id+"</td><td><button class='delete'>Delete</button></td>";
+        filter.innerHTML = "<td>"+item.name+"</td><td>"+item.id+"</td><td><button id='"+item.id+"'' class='delete'>Delete</button></td>";
         filterTable.appendChild(filter);
     });
 
-    if (targets.length == 0) {
-        targets = document.querySelectorAll('.delete');
-    }
+    targets = document.querySelectorAll('.delete');
 
     for (var i = targets.length - 1; i >= 0; i--) {
-        targets[i].addEventListener('click', function() {
-            console.log("click");
+        targets[i].addEventListener('click', function(el) {
+            console.log(el.target.id);
+            removeFilter(el.target.id);
         });
     }
     
@@ -54,6 +53,7 @@ function removeFilter(filterId) {
     }
 
     currentFilter.splice(i,1);
+    localStorage.filter=JSON.stringify(currentFilter);
     reloadFilter();
 }
 
@@ -75,7 +75,7 @@ window.addEventListener('load', function() {
 
     if (name.value != "" && id.value != "") {
         var currentFilter = JSON.parse(localStorage.filter);
-        currentFilter.push({name: name.value, id:id.value});
+        currentFilter.push({name: name.value, id:id.value, lastModifyDate:"1"});
         localStorage.filter = JSON.stringify(currentFilter);
         reloadFilter();
     }
