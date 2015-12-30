@@ -5,11 +5,8 @@ if (!chrome.cookies) {
   chrome.cookies = chrome.experimental.cookies;
 }
 
-var login_url = 'https://swgjazz.ibm.com:8017/jazz/service/com.ibm.team.repository.service.internal.webuiInitializer.IWebUIInitializerRestService/j_security_check';
 var url = 'https://swgjazz.ibm.com:8017/jazz/service/com.ibm.team.workitem.common.internal.rest.IQueryRestService/getResultSet';
 var post_field = 'startIndex=0&maxResults=5&filterAttribute=&filterValue=&itemId=';
-// var post_field = 'startIndex=0&maxResults=5&filterAttribute=&filterValue=&itemId=_Rxcb4I8rEeSN-dPMeJF_tQ';
-// var post_field = 'startIndex=0&maxResults=5&filterAttribute=&filterValue=&itemId=_Rxcb4I8rEeSN-dPMeJF_tQ&projectAreaItemId=_TpqD8FSeEeCF6b5qT5IShg';
 var refer = 'https://swgjazz.ibm.com:8017/jazz/web/projects/Social%20CRM%20-%20Sales%20Force%20Automation';
 var isActivated = false;
 var isInitialized=false;
@@ -90,19 +87,6 @@ function parseResultList(result, filter) {
       localStorage.lastItemDate = lastDate;
       updateLastModifyDate(filter.id, lastDate);
     }
-    // items.forEach(function(value, index) {
-    //   var date = parseInt(value['labels'][7]);
-    //   if (localStorage.lastItemDate == 1 || date > localStorage.lastItemDate) {
-    //     if (date > lastDate) {
-    //       lastDate = date;
-    //     }
-    //     showNotice(value,date);
-    //   }
-    // });
-    // if (lastDate != 0) {
-    //   localStorage.lastItemDate = lastDate;
-    // }
-    
 }
 
 function getRTCList(cookies) {
@@ -151,12 +135,6 @@ function onload() {
   });
   // show('error!login rtc error! please login rtc again');
 }
-
-
-// chrome.browserAction.onClicked.addListener(function(tab) {
-//   console.log('onload');
-//   onload();
-// });
 
 chrome.notifications.onClicked.addListener(function(notificationId){
   chrome.notifications.clear(notificationId);
