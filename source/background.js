@@ -49,7 +49,7 @@ function show(body,id) {
   });
 }
 
-function showNotice(value,date){
+function showNotice(value, date){
   var body = [];
         body.push({title:"ID", message:value['labels'][1]});
         body.push({title:"Summary", message:value['labels'][2]});
@@ -78,9 +78,16 @@ function parseResultList(result, filter) {
       var date = parseInt(value['labels'][7]);
       if (filter.lastModifyDate == 1 || date > filter.lastModifyDate) {
         if (date > lastDate) {
-          lastDate = date;
+            lastDate = date;
         }
-        showNotice(value,date);
+
+        var todayItems = JSON.parse(sessionStorage.todayItems);
+        todayItems.push({ID: value['labels'][1], summary:value['labels'][2]});
+        sessionStorage.todayItems = JSON.stringify(todayItems);
+
+        chrome.runtime.sendMessage(value);
+
+        showNotice(value, date);
       }
     });
     if (lastDate != 0) {
@@ -155,6 +162,10 @@ if (!localStorage.filter) {
     {name:"Copy of 2.2 Unresolved Defects - Found in R3.1",id:"_Rxcb4I8rEeSN-dPMeJF_tQ", lastModifyDate:1}
   ];
   localStorage.filter=JSON.stringify(defaultFilter);
+}
+
+if(!sessionStorage.todayItems) {
+  sessionStorage.todayItems = JSON.stringify([]);
 }
 
 chrome.extension.onRequest.addListener(

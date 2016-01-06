@@ -1,16 +1,4 @@
-// Copyright (c) 2011 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
 
-/*
-  Grays out or [whatever the opposite of graying out is called] the option
-  field.
-*/
-// function ghost(isDeactivated) {
-//   options.style.color = isDeactivated ? 'graytext' : 'black';
-//                                               // The label color.
-//   options.frequency.disabled = isDeactivated; // The control manipulability.
-// }
 
 function reloadFilter() {
     var currentFilter = JSON.parse(localStorage.filter);
@@ -41,6 +29,20 @@ function reloadFilter() {
     
 }
 
+function addNewItem(item) {
+    var itemList = document.querySelector('#todayItems ol');
+    var newItem = document.createElement("li");
+    newItem.innerHTML = item.ID + " - " + item.summary;
+    itemList.appendChild(newItem);
+}
+
+function initNewItems(items) {
+    items.forEach(function(item){
+        addNewItem(item);
+    });
+}
+
+
 
 function removeFilter(filterId) {
     var deleteIndex;
@@ -57,6 +59,16 @@ function removeFilter(filterId) {
     reloadFilter();
 }
 
+if(!sessionStorage.todayItems) {
+  sessionStorage.todayItems = JSON.stringify([]);
+}
+
+chrome.runtime.onMessage.addListener(function(value, sender, sendResponse){
+    var todayItems = JSON.parse(sessionStorage.todayItems);
+    todayItems.push({ID: value['labels'][1], summary:value['labels'][2]});
+    sessionStorage.todayItems = JSON.stringify(todayItems);
+});
+
 window.addEventListener('load', function() {
   // Initialize the option controls.
   // options.isActivated.checked = JSON.parse(localStorage.isActivated);
@@ -68,6 +80,7 @@ window.addEventListener('load', function() {
   // if (!options.isActivated.checked) { ghost(true); }
 
   reloadFilter();
+  initNewItems(JSON.parse(sessionStorage.todayItems));
 
   document.querySelector('#add').addEventListener('click', function() {
     var name = document.getElementById("name");
