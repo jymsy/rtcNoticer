@@ -36,10 +36,13 @@ function addNewItem(item) {
     itemList.appendChild(newItem);
 }
 
-function initNewItems(items) {
-    items.forEach(function(item){
-        addNewItem(item);
+function initNewItems() {
+    chrome.runtime.sendMessage("initItems", function(items) {
+        items.forEach(function(item){
+            addNewItem(item);
+        });
     });
+
 }
 
 
@@ -59,14 +62,10 @@ function removeFilter(filterId) {
     reloadFilter();
 }
 
-if(!sessionStorage.todayItems) {
-  sessionStorage.todayItems = JSON.stringify([]);
-}
-
 chrome.runtime.onMessage.addListener(function(value, sender, sendResponse){
-    var todayItems = JSON.parse(sessionStorage.todayItems);
-    todayItems.push({ID: value['labels'][1], summary:value['labels'][2]});
-    sessionStorage.todayItems = JSON.stringify(todayItems);
+    if (value !== "initItems") {
+        addNewItem({ID: value['labels'][1], summary:value['labels'][2]});
+    };
 });
 
 window.addEventListener('load', function() {
@@ -80,7 +79,7 @@ window.addEventListener('load', function() {
   // if (!options.isActivated.checked) { ghost(true); }
 
   reloadFilter();
-  initNewItems(JSON.parse(sessionStorage.todayItems));
+  initNewItems();
 
   document.querySelector('#add').addEventListener('click', function() {
     var name = document.getElementById("name");

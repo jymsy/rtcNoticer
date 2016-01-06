@@ -147,6 +147,12 @@ chrome.notifications.onClicked.addListener(function(notificationId){
   chrome.notifications.clear(notificationId);
 });
 
+chrome.runtime.onMessage.addListener(function(value, sender, sendResponse){
+    if (value === "initItems") {
+        sendResponse(JSON.parse(sessionStorage.todayItems));
+    }
+});
+
 chrome.notifications.onButtonClicked.addListener(function(notificationId,buttonIndex){
   chrome.notifications.clear(notificationId);
   var id = /.*:(.*)/.exec(notificationId)[1];
