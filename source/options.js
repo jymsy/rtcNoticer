@@ -96,12 +96,6 @@ window.addEventListener('load', function() {
     id.value = "";
   });
 
-  // Set the display activation and frequency.
-  // options.isActivated.onchange = function() {
-  //   localStorage.isActivated = options.isActivated.checked;
-  //   ghost(!options.isActivated.checked);
-  // };
-
   freq.onchange = function() {
     localStorage.frequency = freq.value;
   };
