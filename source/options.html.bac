@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>RTC Notification</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <script src="jquery-2.1.4.min.js"></script>
+    <script src="lib/react.js"></script>
+    <script src="lib/react-dom.js"></script>
+    <script src="options.js"></script>
+  </head>
+  <body>
+    <script src="html.js"></script>
+    <div class="page-header">
+        <h1>
+            <img src="64.png" alt="Toast">
+                RTC Notification
+        </h1>
+    </div>
+
+    <h2>Options</h2>
+    <div id="options">
+      Check new defects every
+      <select id="frequency">
+        <option>10</option>
+        <option>30</option>
+        <option>60</option>
+      </select>
+      second(s).<br/>
+      <section>
+        Current filters:
+        <table id="filter">
+            <thead>
+                <tr>
+                    <th>name</th>
+                    <th>id</th>
+                    <th>actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+      </section>
+      Add filter:
+      <div>
+      name: <input id="name" type="text" style="width:200px">   id:<input id="id" type="text" style="width:200px">
+      <button id="add">Add</button>
+      </div>
+      
+    </div>
+    <div id="todayItems">
+        <ol>
+            
+        </ol>
+    </div>
+  </body>
+</html>
