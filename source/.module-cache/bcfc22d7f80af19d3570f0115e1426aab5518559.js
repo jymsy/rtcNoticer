@@ -69,7 +69,7 @@ var TodayItems = React.createClass({displayName: "TodayItems",
   render: function() {
     return (
       React.createElement("div", {id: "todayItems"}, 
-        React.createElement("h2", null, "Defects since last check:"), 
+        React.createElement("h2", null, "Today's Defects:"), 
         React.createElement("ol", null)
       )
     );

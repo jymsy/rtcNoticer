@@ -38,9 +38,11 @@ function addNewItem(item) {
 
 function initNewItems() {
     chrome.runtime.sendMessage("initItems", function(items) {
-        items.forEach(function(item){
-            addNewItem(item);
-        });
+        if (items) {
+            items.forEach(function(item){
+                addNewItem(item);
+            });
+        }
     });
 
 }
@@ -69,14 +71,8 @@ chrome.runtime.onMessage.addListener(function(value, sender, sendResponse){
 });
 
 window.addEventListener('load', function() {
-  // Initialize the option controls.
-  // options.isActivated.checked = JSON.parse(localStorage.isActivated);
-  //                                        // The display activation.
-  // options.frequency.value = localStorage.frequency;
   var freq = document.querySelector('#frequency');
   freq.value = localStorage.frequency;
-                                         // The display frequency, in seconds.
-  // if (!options.isActivated.checked) { ghost(true); }
 
   reloadFilter();
   initNewItems();

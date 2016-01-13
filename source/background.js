@@ -22,6 +22,22 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
     {urls: ['https://swgjazz.ibm.com:8017/*']},
     ["blocking", "requestHeaders"]
 );
+
+//right button click
+chrome.contextMenus.create({
+    title: "Add to Focusing On",
+    documentUrlPatterns: ["https://swgjazz.ibm.com:8017/*"],
+    onclick: function (info, tab){
+       alert("focus");
+    }
+});
+
+function localStorgeAppend(key, item) {
+  if (item) {
+
+  };
+}
+
 /*
   Displays a notification with the current time. Requires "notifications"
   permission in the manifest file (or calling
