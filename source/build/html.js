@@ -3,7 +3,7 @@ var CurrentFilters = React.createClass({
   render: function() {
     return (
     <section>
-        Current filters:
+        <h2>Current filters:</h2>
         <table id="filter">
             <thead>
                 <tr>
@@ -69,6 +69,18 @@ var TodayItems = React.createClass({
   render: function() {
     return (
       <div id="todayItems">
+        <h2>Defects since last check:</h2>
+        <ol></ol>
+      </div>
+    );
+  }
+});
+
+var FocusingOn = React.createClass({
+  render: function() {
+    return (
+      <div id="focusingOn">
+        <h2>Focusing On:</h2>
         <ol></ol>
       </div>
     );
@@ -81,6 +93,7 @@ var Options = React.createClass({
       <div>
         <Header/>
         <OptionsBox/>
+        <FocusingOn/>
         <TodayItems/>
       </div>
     );

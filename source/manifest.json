@@ -3,8 +3,15 @@
   "version" : "0.1",
   "description" : "RTC defect noticer",
   "permissions": [
-    "cookies", "tabs", "http://*/*", "https://*/*","notifications","webRequest", "webRequestBlocking"
-    ],
+    "cookies",
+    "tabs",
+    "http://*/*",
+    "https://*/*",
+    "notifications",
+    "webRequest",
+    "webRequestBlocking",
+    "contextMenus"
+  ],
   "icons": { "16": "cookie.png", "48": "48.png","128": "128.png"},
   "options_page": "options.html",
   "background": { "scripts": ["background.js"] },

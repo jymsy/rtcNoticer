@@ -22,6 +22,27 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
     {urls: ['https://swgjazz.ibm.com:8017/*']},
     ["blocking", "requestHeaders"]
 );
+
+//right button click
+chrome.contextMenus.create({
+    title: "Add to Focusing On",
+    documentUrlPatterns: ["https://swgjazz.ibm.com:8017/*"],
+    onclick: function (info, tab){
+      var id = info.pageUrl.match(/.*id=(\d+$)/)[1];
+      console.log(id);
+      var summary = tab.title;
+      //53
+    }
+});
+
+function localStorageAppend(key, item) {
+  if (item) {
+    var current = JSON.parse(localStorage.getItem(key));
+
+    localStorage.filter = JSON.stringify(currentFilter);
+  };
+}
+
 /*
   Displays a notification with the current time. Requires "notifications"
   permission in the manifest file (or calling
@@ -106,8 +127,7 @@ function getRTCList(cookies) {
     var xmlhttp = new XMLHttpRequest();
     var result;
     xmlhttp.onreadystatechange = function() {
-      if (xmlhttp.readyState==4 && xmlhttp.status==200)
-      {
+      if (xmlhttp.readyState==4 && xmlhttp.status==200) {
         parseResultList(JSON.parse(xmlhttp.responseText), filter);
       }
     }
@@ -172,6 +192,10 @@ if (!localStorage.filter) {
 
 if(!sessionStorage.todayItems) {
   sessionStorage.todayItems = JSON.stringify([]);
+}
+
+if(!localStorage.focusingOn) {
+  localStorage.focusingOn = JSON.stringify([]);
 }
 
 chrome.extension.onRequest.addListener(
