@@ -28,13 +28,18 @@ chrome.contextMenus.create({
     title: "Add to Focusing On",
     documentUrlPatterns: ["https://swgjazz.ibm.com:8017/*"],
     onclick: function (info, tab){
-       alert("focus");
+      var id = info.pageUrl.match(/.*id=(\d+$)/)[1];
+      console.log(id);
+      var summary = tab.title;
+      //53
     }
 });
 
-function localStorgeAppend(key, item) {
+function localStorageAppend(key, item) {
   if (item) {
+    var current = JSON.parse(localStorage.getItem(key));
 
+    localStorage.filter = JSON.stringify(currentFilter);
   };
 }
 
@@ -122,8 +127,7 @@ function getRTCList(cookies) {
     var xmlhttp = new XMLHttpRequest();
     var result;
     xmlhttp.onreadystatechange = function() {
-      if (xmlhttp.readyState==4 && xmlhttp.status==200)
-      {
+      if (xmlhttp.readyState==4 && xmlhttp.status==200) {
         parseResultList(JSON.parse(xmlhttp.responseText), filter);
       }
     }
@@ -188,6 +192,10 @@ if (!localStorage.filter) {
 
 if(!sessionStorage.todayItems) {
   sessionStorage.todayItems = JSON.stringify([]);
+}
+
+if(!localStorage.focusingOn) {
+  localStorage.focusingOn = JSON.stringify([]);
 }
 
 chrome.extension.onRequest.addListener(
