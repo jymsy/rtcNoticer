@@ -29,15 +29,26 @@ function reloadFilter() {
     
 }
 
-function addNewItem(item) {
-    var itemList = document.querySelector('#todayItems ol');
+function addItem(selector, item) {
+    var itemList = document.querySelector(selector);
     var newItem = document.createElement("li");
-    newItem.innerHTML = item.ID + " - " + item.summary;
+    newItem.innerHTML = item.id + " - " + item.summary;
     itemList.appendChild(newItem);
 }
 
+function addFocusingOn(item) {
+    addItem('#focusingOn ol', item);
+}
+
+function addNewItem(item) {
+    addItem('#todayItems ol', item);
+}
+
 function initNewItems() {
-    chrome.runtime.sendMessage("initItems", function(items) {
+    var message = {
+        type: "initItems"
+    };
+    chrome.runtime.sendMessage(message, function(items) {
         if (items) {
             items.forEach(function(item){
                 addNewItem(item);
@@ -47,6 +58,12 @@ function initNewItems() {
 
 }
 
+function initFocusingOn() {
+    var focusingOnList = JSON.parse(localStorage.getItem('focusingOn'));
+    focusingOnList.forEach(function(item) {
+        addFocusingOn(item);
+    });
+}
 
 
 function removeFilter(filterId) {
@@ -64,10 +81,12 @@ function removeFilter(filterId) {
     reloadFilter();
 }
 
-chrome.runtime.onMessage.addListener(function(value, sender, sendResponse){
-    if (value !== "initItems") {
-        addNewItem({ID: value['labels'][1], summary:value['labels'][2]});
-    };
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
+    if (message.type == "addNewItem") {
+        addNewItem(message.value);
+    } else if(message.type == "addFocusingOn"){
+        addFocusingOn(message.value);
+    }
 });
 
 window.addEventListener('load', function() {
@@ -76,6 +95,7 @@ window.addEventListener('load', function() {
 
   reloadFilter();
   initNewItems();
+  initFocusingOn();
 
   document.querySelector('#add').addEventListener('click', function() {
     var name = document.getElementById("name");

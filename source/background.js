@@ -29,17 +29,21 @@ chrome.contextMenus.create({
     documentUrlPatterns: ["https://swgjazz.ibm.com:8017/*"],
     onclick: function (info, tab){
       var id = info.pageUrl.match(/.*id=(\d+$)/)[1];
-      console.log(id);
-      var summary = tab.title;
+      var item = {id:id, summary:tab.title};
+      localStorageArrayAppend('focusingOn', item);
+      chrome.runtime.sendMessage({
+        type: "addFocusingOn",
+        value: item
+      });
       //53
     }
 });
 
-function localStorageAppend(key, item) {
+function localStorageArrayAppend(key, item) {
   if (item) {
     var current = JSON.parse(localStorage.getItem(key));
-
-    localStorage.filter = JSON.stringify(currentFilter);
+    current.push(item);
+    localStorage.setItem(key, JSON.stringify(current));
   };
 }
 
@@ -53,10 +57,7 @@ function show(body,id) {
   var time = /(..)(:..)/.exec(new Date());     // The prettyprinted time.
   var hour = time[1] % 12 || 12;               // The prettyprinted hour.
   var period = time[1] < 12 ? 'a.m.' : 'p.m.'; // The period of the day.
-  // new Notification(hour + time[2] + ' ' + period, {
-  //   icon: '48.png',
-  //   body: body
-  // });
+
   var opt = {
     type: "list",
     title: hour + time[2] + ' ' + period,
@@ -103,10 +104,20 @@ function parseResultList(result, filter) {
         }
 
         var todayItems = JSON.parse(sessionStorage.todayItems);
-        todayItems.push({ID: value['labels'][1], summary:value['labels'][2]});
+        var newItem = {
+          id: value['labels'][1],
+          summary:value['labels'][2]
+        };
+
+        var message = {
+          type: 'addNewItem',
+          value: newItem
+        };
+
+        todayItems.push(newItem);
         sessionStorage.todayItems = JSON.stringify(todayItems);
 
-        chrome.runtime.sendMessage(value);
+        chrome.runtime.sendMessage(message);
 
         showNotice(value, date);
       }
@@ -167,8 +178,8 @@ chrome.notifications.onClicked.addListener(function(notificationId){
   chrome.notifications.clear(notificationId);
 });
 
-chrome.runtime.onMessage.addListener(function(value, sender, sendResponse){
-    if (value === "initItems") {
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
+    if (message.type === "initItems") {
         sendResponse(JSON.parse(sessionStorage.todayItems));
     }
 });
