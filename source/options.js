@@ -1,3 +1,4 @@
+var item_url = 'https://swgjazz.ibm.com:8017/jazz/web/projects/Social%20CRM%20-%20Sales%20Force%20Automation#action=com.ibm.team.workitem.viewWorkItem&id=';
 
 
 function reloadFilter() {
@@ -67,7 +68,9 @@ function addItem(selector, item, button) {
     if (button) {
         newItem.innerHTML = button;
     }
-    newItem.innerHTML += item.id + " - " + item.summary;
+    var html = "<a href='" + item_url + item.id + "' target='blank'>"
+    + item.id + " - " + item.summary + "</a>";
+    newItem.innerHTML += html;
     itemList.appendChild(newItem);
     return newItem;
 }
