@@ -21,9 +21,8 @@ function reloadFilter() {
     targets = document.querySelectorAll('.delete_filter');
 
     for (var i = targets.length - 1; i >= 0; i--) {
-        targets[i].addEventListener('click', function(el) {
-            console.log(el.target.id);
-            removeFilter(el.target.id);
+        targets[i].addEventListener('click', function(event) {
+            removeFilter(event.target.id);
         });
     }
     
@@ -74,11 +73,10 @@ function addItem(selector, item, button) {
 }
 
 function addFocusingOn(item) {
-    var button = "<button id='focusing_"+item.id+"'' class='delete_focusing'>X</button>";
+    var button = "<button itemId='"+item.id+"'' class='delete_focusing'>X</button>";
     var newItem = addItem('#focusingOn ol', item, button);
-    newItem.addEventListener('click', function(el) {
-        console.log(el.target.id);
-        removeFocusingOn(el.target.id);
+    newItem.children[0].addEventListener('click', function(event) {
+        removeFocusingOn(event.target.getAttribute('itemId'));
     });
 }
 
