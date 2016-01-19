@@ -42,8 +42,10 @@ chrome.contextMenus.create({
 function localStorageArrayAppend(key, item) {
   if (item) {
     var current = JSON.parse(localStorage.getItem(key));
-    current.push(item);
-    localStorage.setItem(key, JSON.stringify(current));
+    if (current) {
+      current.push(item);
+      localStorage.setItem(key, JSON.stringify(current));
+    }
   };
 }
 
