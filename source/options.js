@@ -3,7 +3,7 @@
 function reloadFilter() {
     var currentFilter = JSON.parse(localStorage.filter);
     var filterTable = document.querySelector('#filter tbody');  
-    var targets = document.querySelectorAll('.delete');
+    var targets = document.querySelectorAll('.delete_filter');
 
     if (targets.length > 0) {
         for (var i = targets.length - 1; i >= 0; i--) {
@@ -14,11 +14,11 @@ function reloadFilter() {
 
     currentFilter.forEach(function(item) {
         var filter = document.createElement("tr");
-        filter.innerHTML = "<td>"+item.name+"</td><td>"+item.id+"</td><td><button id='"+item.id+"'' class='delete'>Delete</button></td>";
+        filter.innerHTML = "<td>"+item.name+"</td><td>"+item.id+"</td><td><button id='"+item.id+"'' class='delete_filter'>Delete</button></td>";
         filterTable.appendChild(filter);
     });
 
-    targets = document.querySelectorAll('.delete');
+    targets = document.querySelectorAll('.delete_filter');
 
     for (var i = targets.length - 1; i >= 0; i--) {
         targets[i].addEventListener('click', function(el) {
@@ -29,15 +29,57 @@ function reloadFilter() {
     
 }
 
-function addItem(selector, item) {
+function reloadFocusingOn() {
+    var focusingOnList = JSON.parse(localStorage.focusingOn);
+    var focusingHtml = document.querySelector('#focusingOn ol');
+    var targets = document.querySelectorAll('.delete_focusing');
+
+    if (targets.length > 0) {
+        for (var i = targets.length - 1; i >= 0; i--) {
+            targets[i].removeEventListener('click');
+        }
+    }
+    focusingHtml.innerHTML="";
+
+    focusingOnList.forEach(function(item) {
+        addFocusingOn(item);
+    });
+}
+
+function removeFocusingOn(id) {
+    var deleteIndex;
+    var focusingOnList = JSON.parse(localStorage.focusingOn);
+
+    for (var i = focusingOnList.length - 1; i >= 0; i--) {
+        if (focusingOnList[i].id == id) {
+            deleteIndex = i;
+            break;
+        }
+    }
+
+    focusingOnList.splice(i,1);
+    localStorage.focusingOn=JSON.stringify(focusingOnList);
+    reloadFocusingOn();
+}
+
+function addItem(selector, item, button) {
     var itemList = document.querySelector(selector);
     var newItem = document.createElement("li");
-    newItem.innerHTML = item.id + " - " + item.summary;
+    if (button) {
+        newItem.innerHTML = button;
+    }
+    newItem.innerHTML += item.id + " - " + item.summary;
     itemList.appendChild(newItem);
+    return newItem;
 }
 
 function addFocusingOn(item) {
-    addItem('#focusingOn ol', item);
+    var button = "<button id='focusing_"+item.id+"'' class='delete_focusing'>X</button>";
+    var newItem = addItem('#focusingOn ol', item, button);
+    newItem.addEventListener('click', function(el) {
+        console.log(el.target.id);
+        removeFocusingOn(el.target.id);
+    });
 }
 
 function addNewItem(item) {
@@ -58,12 +100,12 @@ function initNewItems() {
 
 }
 
-function initFocusingOn() {
-    var focusingOnList = JSON.parse(localStorage.getItem('focusingOn'));
-    focusingOnList.forEach(function(item) {
-        addFocusingOn(item);
-    });
-}
+// function initFocusingOn() {
+//     var focusingOnList = JSON.parse(localStorage.getItem('focusingOn'));
+//     focusingOnList.forEach(function(item) {
+//         addFocusingOn(item);
+//     });
+// }
 
 
 function removeFilter(filterId) {
@@ -95,7 +137,7 @@ window.addEventListener('load', function() {
 
   reloadFilter();
   initNewItems();
-  initFocusingOn();
+  reloadFocusingOn();
 
   document.querySelector('#add').addEventListener('click', function() {
     var name = document.getElementById("name");
