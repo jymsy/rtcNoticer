@@ -68,7 +68,7 @@ function addItem(selector, item, button) {
     if (button) {
         newItem.innerHTML = button;
     }
-    var html = "<a href='" + item_url + item.id + "' target='blank'>"
+    var html = "<a href='" + item_url + item.id + "' target='_blank'>"
     + item.id + " - " + item.summary + "</a>";
     newItem.innerHTML += html;
     itemList.appendChild(newItem);
