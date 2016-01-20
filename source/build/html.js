@@ -4,7 +4,7 @@ var CurrentFilters = React.createClass({
     return (
     <section>
         <h2>Current filters:</h2>
-        <table id="filter">
+          <table className="table" id="filter">
             <thead>
                 <tr>
                     <th>name</th>
@@ -13,7 +13,7 @@ var CurrentFilters = React.createClass({
                 </tr>
             </thead>
             <tbody></tbody>
-        </table>
+          </table>
       </section>
     );
   }
@@ -26,7 +26,7 @@ var NewFilter = React.createClass({
     <div>
       Add filter:<br/>
       name: <input id="name" type="text" style={inputStyle}/>    id:<input id="id" type="text" style={inputStyle}/>
-      <button id="add">Add</button>
+      <button className="btn btn-primary" id="add">Add</button>
     </div>
     );
   }

@@ -4,7 +4,7 @@ var CurrentFilters = React.createClass({displayName: "CurrentFilters",
     return (
     React.createElement("section", null, 
         React.createElement("h2", null, "Current filters:"), 
-        React.createElement("table", {id: "filter"}, 
+          React.createElement("table", {className: "table", id: "filter"}, 
             React.createElement("thead", null, 
                 React.createElement("tr", null, 
                     React.createElement("th", null, "name"), 
@@ -13,7 +13,7 @@ var CurrentFilters = React.createClass({displayName: "CurrentFilters",
                 )
             ), 
             React.createElement("tbody", null)
-        )
+          )
       )
     );
   }
@@ -26,7 +26,7 @@ var NewFilter = React.createClass({displayName: "NewFilter",
     React.createElement("div", null, 
       "Add filter:", React.createElement("br", null), 
       "name: ", React.createElement("input", {id: "name", type: "text", style: inputStyle}), "    id:", React.createElement("input", {id: "id", type: "text", style: inputStyle}), 
-      React.createElement("button", {id: "add"}, "Add")
+      React.createElement("button", {className: "btn btn-primary", id: "add"}, "Add")
     )
     );
   }

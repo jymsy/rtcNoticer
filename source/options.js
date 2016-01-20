@@ -15,7 +15,7 @@ function reloadFilter() {
 
     currentFilter.forEach(function(item) {
         var filter = document.createElement("tr");
-        filter.innerHTML = "<td>"+item.name+"</td><td>"+item.id+"</td><td><button id='"+item.id+"'' class='delete_filter'>Delete</button></td>";
+        filter.innerHTML = "<td>"+item.name+"</td><td>"+item.id+"</td><td><button id='"+item.id+"'' class='delete_filter btn btn-danger'>Delete</button></td>";
         filterTable.appendChild(filter);
     });
 
@@ -76,7 +76,7 @@ function addItem(selector, item, button) {
 }
 
 function addFocusingOn(item) {
-    var button = "<button itemId='"+item.id+"'' class='delete_focusing'>X</button>";
+    var button = "<button itemId='"+item.id+"'' class='delete_focusing btn btn-danger'>X</button>";
     var newItem = addItem('#focusingOn ol', item, button);
     newItem.children[0].addEventListener('click', function(event) {
         removeFocusingOn(event.target.getAttribute('itemId'));
