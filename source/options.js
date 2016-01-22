@@ -117,21 +117,21 @@ function removeFilter(filterId) {
     reloadFilter();
 }
 
-chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
-    if (message.type == "addNewItem") {
-        addNewItem(message.value);
-    }
-    // else if(message.type == "addFocusingOn"){
-    //     addFocusingOn(message.value);
-    // }
-});
+// chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
+//     if (message.type == "addNewItem") {
+//         addNewItem(message.value);
+//     }
+//     // else if(message.type == "addFocusingOn"){
+//     //     addFocusingOn(message.value);
+//     // }
+// });
 
 window.addEventListener('load', function() {
   var freq = document.querySelector('#frequency');
   freq.value = localStorage.frequency;
 
   reloadFilter();
-  initNewItems();
+  // initNewItems();
   // reloadFocusingOn();
 
   document.querySelector('#add').addEventListener('click', function() {

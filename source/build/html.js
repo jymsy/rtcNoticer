@@ -66,12 +66,54 @@ var Header = React.createClass({
   }
 });
 
-var TodayItems = React.createClass({
+var NewDefectRow = React.createClass({
   render: function() {
+    var link = item_url + this.props.item.id;
+    return (
+      <li>
+        <a href={link} target="_blank">{this.props.item.id} - {this.props.item.summary}</a>
+      </li>
+    );
+  }
+});
+
+var TodayItems = React.createClass({
+  getInitialState: function() {
+    return {
+      list: []
+    };
+  },
+  componentWillMount: function() {
+    var message = {
+        type: "initItems"
+    };
+
+    chrome.runtime.sendMessage(message, function(items) {
+        if (items) {
+          this.setState({list:items});
+        }
+    }.bind(this));
+  },
+  componentDidMount: function() {
+    chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
+      if(message.type == "addNewItem"){
+        console.log('add new item');
+        var list = this.state.list;
+        list.push(message.value);
+        this.setState({list:list});
+      }
+    }.bind(this));
+  },
+  render: function() {
+    var rows = [];
+    console.log(this.state.list);
+    this.state.list.forEach(function(item) {
+      rows.push(<NewDefectRow item={item} />);
+    }.bind(this));
     return (
       <div id="todayItems">
         <h2>Defects since last check:</h2>
-        <ol></ol>
+        <ol>{rows}</ol>
       </div>
     );
   }
@@ -100,7 +142,6 @@ var FocusingOn = React.createClass({
     };
   },
   handleDeleteFocusing: function(item) {
-    console.log(this.state.list);
     var focusingOnList = this.state.list
     for (var i = focusingOnList.length - 1; i >= 0; i--) {
         if (focusingOnList[i].id == item.id) {
