@@ -76,7 +76,7 @@ function addItem(selector, item, button) {
 }
 
 function addFocusingOn(item) {
-    var button = "<button itemId='"+item.id+"'' class='delete_focusing btn btn-danger'>X</button>";
+    var button = "<button itemId='"+item.id+"' class='delete_focusing btn btn-danger'>X</button>";
     var newItem = addItem('#focusingOn ol', item, button);
     newItem.children[0].addEventListener('click', function(event) {
         removeFocusingOn(event.target.getAttribute('itemId'));
@@ -100,13 +100,6 @@ function initNewItems() {
     });
 
 }
-
-// function initFocusingOn() {
-//     var focusingOnList = JSON.parse(localStorage.getItem('focusingOn'));
-//     focusingOnList.forEach(function(item) {
-//         addFocusingOn(item);
-//     });
-// }
 
 
 function removeFilter(filterId) {
@@ -138,7 +131,7 @@ window.addEventListener('load', function() {
 
   reloadFilter();
   initNewItems();
-  reloadFocusingOn();
+  // reloadFocusingOn();
 
   document.querySelector('#add').addEventListener('click', function() {
     var name = document.getElementById("name");

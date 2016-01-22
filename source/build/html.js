@@ -1,3 +1,4 @@
+var item_url = 'https://swgjazz.ibm.com:8017/jazz/web/projects/Social%20CRM%20-%20Sales%20Force%20Automation#action=com.ibm.team.workitem.viewWorkItem&id=';
 
 var CurrentFilters = React.createClass({
   render: function() {
@@ -76,12 +77,51 @@ var TodayItems = React.createClass({
   }
 });
 
-var FocusingOn = React.createClass({
+var FocusingOnRow = React.createClass({
+  handleClick: function() {
+    this.props.onDeleted(this.props.item);
+  },
   render: function() {
+    var link = item_url + this.props.item.id;
+    return (
+      <li>
+        <button onClick={this.handleClick} itemid={this.props.item.id} className="delete_focusing btn btn-danger">X</button>
+        <a href={link} target="_blank">{this.props.item.summary}</a>
+      </li>
+    );
+  }
+});
+
+var FocusingOn = React.createClass({
+  getInitialState: function() {
+    var focusingOnList = JSON.parse(localStorage.focusingOn);
+    return {
+      list: focusingOnList
+    };
+  },
+  handleDeleteFocusing: function(item) {
+    console.log(this.state.list);
+    var focusingOnList = this.state.list
+    for (var i = focusingOnList.length - 1; i >= 0; i--) {
+        if (focusingOnList[i].id == item.id) {
+            deleteIndex = i;
+            break;
+        }
+    }
+
+    focusingOnList.splice(i,1);
+    localStorage.focusingOn=JSON.stringify(focusingOnList);
+    this.setState({list: focusingOnList});
+  },
+  render: function() {
+    var rows = [];
+    this.state.list.forEach(function(item) {
+      rows.push(<FocusingOnRow item={item} onDeleted={this.handleDeleteFocusing} />);
+    }.bind(this));
     return (
       <div id="focusingOn">
         <h2>Focusing On:</h2>
-        <ol></ol>
+        <ol>{rows}</ol>
       </div>
     );
   }
@@ -89,12 +129,13 @@ var FocusingOn = React.createClass({
 
 var Options = React.createClass({
   render: function() {
+    var focusingOnList = JSON.parse(localStorage.focusingOn);
     return (
       <div>
-        <Header/>
-        <OptionsBox/>
-        <FocusingOn/>
-        <TodayItems/>
+        <Header />
+        <OptionsBox />
+        <FocusingOn />
+        <TodayItems />
       </div>
     );
   }

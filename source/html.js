@@ -1,3 +1,4 @@
+var item_url = 'https://swgjazz.ibm.com:8017/jazz/web/projects/Social%20CRM%20-%20Sales%20Force%20Automation#action=com.ibm.team.workitem.viewWorkItem&id=';
 
 var CurrentFilters = React.createClass({displayName: "CurrentFilters",
   render: function() {
@@ -76,12 +77,51 @@ var TodayItems = React.createClass({displayName: "TodayItems",
   }
 });
 
-var FocusingOn = React.createClass({displayName: "FocusingOn",
+var FocusingOnRow = React.createClass({displayName: "FocusingOnRow",
+  handleClick: function() {
+    this.props.onDeleted(this.props.item);
+  },
   render: function() {
+    var link = item_url + this.props.item.id;
+    return (
+      React.createElement("li", null, 
+        React.createElement("button", {onClick: this.handleClick, itemid: this.props.item.id, className: "delete_focusing btn btn-danger"}, "X"), 
+        React.createElement("a", {href: link, target: "_blank"}, this.props.item.summary)
+      )
+    );
+  }
+});
+
+var FocusingOn = React.createClass({displayName: "FocusingOn",
+  getInitialState: function() {
+    var focusingOnList = JSON.parse(localStorage.focusingOn);
+    return {
+      list: focusingOnList
+    };
+  },
+  handleDeleteFocusing: function(item) {
+    console.log(this.state.list);
+    var focusingOnList = this.state.list
+    for (var i = focusingOnList.length - 1; i >= 0; i--) {
+        if (focusingOnList[i].id == item.id) {
+            deleteIndex = i;
+            break;
+        }
+    }
+
+    focusingOnList.splice(i,1);
+    localStorage.focusingOn=JSON.stringify(focusingOnList);
+    this.setState({list: focusingOnList});
+  },
+  render: function() {
+    var rows = [];
+    this.state.list.forEach(function(item) {
+      rows.push(React.createElement(FocusingOnRow, {item: item, onDeleted: this.handleDeleteFocusing}));
+    }.bind(this));
     return (
       React.createElement("div", {id: "focusingOn"}, 
         React.createElement("h2", null, "Focusing On:"), 
-        React.createElement("ol", null)
+        React.createElement("ol", null, rows)
       )
     );
   }
@@ -89,6 +129,7 @@ var FocusingOn = React.createClass({displayName: "FocusingOn",
 
 var Options = React.createClass({displayName: "Options",
   render: function() {
+    var focusingOnList = JSON.parse(localStorage.focusingOn);
     return (
       React.createElement("div", null, 
         React.createElement(Header, null), 
