@@ -29,78 +29,6 @@ function reloadFilter() {
     
 }
 
-function reloadFocusingOn() {
-    var focusingOnList = JSON.parse(localStorage.focusingOn);
-    var focusingHtml = document.querySelector('#focusingOn ol');
-    var targets = document.querySelectorAll('.delete_focusing');
-
-    if (targets.length > 0) {
-        for (var i = targets.length - 1; i >= 0; i--) {
-            targets[i].removeEventListener('click');
-        }
-    }
-    focusingHtml.innerHTML="";
-
-    focusingOnList.forEach(function(item) {
-        addFocusingOn(item);
-    });
-}
-
-function removeFocusingOn(id) {
-    var deleteIndex;
-    var focusingOnList = JSON.parse(localStorage.focusingOn);
-
-    for (var i = focusingOnList.length - 1; i >= 0; i--) {
-        if (focusingOnList[i].id == id) {
-            deleteIndex = i;
-            break;
-        }
-    }
-
-    focusingOnList.splice(i,1);
-    localStorage.focusingOn=JSON.stringify(focusingOnList);
-    reloadFocusingOn();
-}
-
-function addItem(selector, item, button) {
-    var itemList = document.querySelector(selector);
-    var newItem = document.createElement("li");
-    if (button) {
-        newItem.innerHTML = button;
-    }
-    var html = "<a href='" + item_url + item.id + "' target='_blank'>"
-    + item.id + " - " + item.summary + "</a>";
-    newItem.innerHTML += html;
-    itemList.appendChild(newItem);
-    return newItem;
-}
-
-function addFocusingOn(item) {
-    var button = "<button itemId='"+item.id+"' class='delete_focusing btn btn-danger'>X</button>";
-    var newItem = addItem('#focusingOn ol', item, button);
-    newItem.children[0].addEventListener('click', function(event) {
-        removeFocusingOn(event.target.getAttribute('itemId'));
-    });
-}
-
-function addNewItem(item) {
-    addItem('#todayItems ol', item);
-}
-
-function initNewItems() {
-    var message = {
-        type: "initItems"
-    };
-    chrome.runtime.sendMessage(message, function(items) {
-        if (items) {
-            items.forEach(function(item){
-                addNewItem(item);
-            });
-        }
-    });
-
-}
-
 
 function removeFilter(filterId) {
     var deleteIndex;
@@ -117,22 +45,11 @@ function removeFilter(filterId) {
     reloadFilter();
 }
 
-// chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
-//     if (message.type == "addNewItem") {
-//         addNewItem(message.value);
-//     }
-//     // else if(message.type == "addFocusingOn"){
-//     //     addFocusingOn(message.value);
-//     // }
-// });
-
 window.addEventListener('load', function() {
   var freq = document.querySelector('#frequency');
   freq.value = localStorage.frequency;
 
   reloadFilter();
-  // initNewItems();
-  // reloadFocusingOn();
 
   document.querySelector('#add').addEventListener('click', function() {
     var name = document.getElementById("name");
