@@ -120,9 +120,10 @@ function removeFilter(filterId) {
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
     if (message.type == "addNewItem") {
         addNewItem(message.value);
-    } else if(message.type == "addFocusingOn"){
-        addFocusingOn(message.value);
     }
+    // else if(message.type == "addFocusingOn"){
+    //     addFocusingOn(message.value);
+    // }
 });
 
 window.addEventListener('load', function() {

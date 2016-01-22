@@ -113,6 +113,15 @@ var FocusingOn = React.createClass({displayName: "FocusingOn",
     localStorage.focusingOn=JSON.stringify(focusingOnList);
     this.setState({list: focusingOnList});
   },
+  componentDidMount: function() {
+    var self = this;
+    chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
+      if(message.type == "addFocusingOn"){
+        var focusingOnList = JSON.parse(localStorage.focusingOn);
+        self.setState({list: focusingOnList});
+      }
+    });
+  },
   render: function() {
     var rows = [];
     this.state.list.forEach(function(item) {

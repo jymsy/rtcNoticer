@@ -29,13 +29,16 @@ chrome.contextMenus.create({
     documentUrlPatterns: ["https://swgjazz.ibm.com:8017/*"],
     onclick: function (info, tab){
       var id = info.pageUrl.match(/.*id=(\d+$)/)[1];
-      var item = {id:id, summary:tab.title};
-      localStorageArrayAppend('focusingOn', item);
-      chrome.runtime.sendMessage({
-        type: "addFocusingOn",
-        value: item
-      });
-      //53
+      if (id) {
+        var item = {id:id, summary:tab.title};
+        localStorageArrayAppend('focusingOn', item);
+        chrome.runtime.sendMessage({
+          type: "addFocusingOn",
+          value: item
+        });
+        //53
+      }
+
     }
 });
 
