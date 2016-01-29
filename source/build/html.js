@@ -24,11 +24,16 @@ var NewFilter = React.createClass({
   render: function() {
     var inputStyle = {width:'200px'};
     return (
-    <div>
+    <form className="form-inline">
       Add filter:<br/>
-      name: <input id="name" type="text" style={inputStyle}/>    id:<input id="id" type="text" style={inputStyle}/>
+      <div className="form-group">
+        <input id="name" type="text" className="form-control" style={inputStyle} placeholder="Name"/>
+      </div>
+      <div className="form-group">
+        <input id="id" type="text" className="form-control" style={inputStyle} placeholder="ID"/>
+      </div>
       <button className="btn btn-primary" id="add">Add</button>
-    </div>
+    </form>
     );
   }
 });
@@ -39,7 +44,7 @@ var OptionsBox = React.createClass({
       <div id="options">
         <h2>Options</h2>
         Check new defects every
-        <select id="frequency">
+        <select className="form-control" id="frequency">
           <option>10</option>
           <option>30</option>
           <option>60</option>

@@ -24,9 +24,14 @@ var NewFilter = React.createClass({displayName: "NewFilter",
   render: function() {
     var inputStyle = {width:'200px'};
     return (
-    React.createElement("div", null, 
+    React.createElement("form", {className: "form-inline"}, 
       "Add filter:", React.createElement("br", null), 
-      "name: ", React.createElement("input", {id: "name", type: "text", style: inputStyle}), "    id:", React.createElement("input", {id: "id", type: "text", style: inputStyle}), 
+      React.createElement("div", {className: "form-group"}, 
+        React.createElement("input", {id: "name", type: "text", className: "form-control", style: inputStyle, placeholder: "Name"})
+      ), 
+      React.createElement("div", {className: "form-group"}, 
+        React.createElement("input", {id: "id", type: "text", className: "form-control", style: inputStyle, placeholder: "ID"})
+      ), 
       React.createElement("button", {className: "btn btn-primary", id: "add"}, "Add")
     )
     );
@@ -39,7 +44,7 @@ var OptionsBox = React.createClass({displayName: "OptionsBox",
       React.createElement("div", {id: "options"}, 
         React.createElement("h2", null, "Options"), 
         "Check new defects every", 
-        React.createElement("select", {id: "frequency"}, 
+        React.createElement("select", {className: "form-control", id: "frequency"}, 
           React.createElement("option", null, "10"), 
           React.createElement("option", null, "30"), 
           React.createElement("option", null, "60")
