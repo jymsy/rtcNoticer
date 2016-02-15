@@ -6,7 +6,7 @@ if (!chrome.cookies) {
 }
 
 var url = 'https://swgjazz.ibm.com:8017/jazz/service/com.ibm.team.workitem.common.internal.rest.IQueryRestService/getResultSet';
-var post_field = 'startIndex=0&maxResults=5&filterAttribute=&filterValue=&itemId=';
+var post_field = 'startIndex=0&maxResults=10&filterAttribute=&filterValue=&itemId=';
 var refer = 'https://swgjazz.ibm.com:8017/jazz/web/projects/Social%20CRM%20-%20Sales%20Force%20Automation';
 var isActivated = false;
 var isInitialized=false;

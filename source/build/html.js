@@ -186,7 +186,7 @@ var Options = React.createClass({
   render: function() {
     var focusingOnList = JSON.parse(localStorage.focusingOn);
     return (
-      <div>
+      <div className="row">
         <Header />
         <OptionsBox />
         <FocusingOn />

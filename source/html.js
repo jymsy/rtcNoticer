@@ -186,7 +186,7 @@ var Options = React.createClass({displayName: "Options",
   render: function() {
     var focusingOnList = JSON.parse(localStorage.focusingOn);
     return (
-      React.createElement("div", null, 
+      React.createElement("div", {className: "row"}, 
         React.createElement(Header, null), 
         React.createElement(OptionsBox, null), 
         React.createElement(FocusingOn, null), 
