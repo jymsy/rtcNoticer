@@ -5,7 +5,9 @@ var CurrentFilters = React.createClass({displayName: "CurrentFilters",
     return (
     React.createElement("section", null, 
         React.createElement("h2", null, "Current filters:"), 
-          React.createElement("table", {className: "table", id: "filter"}, 
+        React.createElement("div", {className: "row"}, 
+          React.createElement("div", {className: "col-lg-6"}, 
+          React.createElement("table", {className: "table table-bordered", id: "filter"}, 
             React.createElement("thead", null, 
                 React.createElement("tr", null, 
                     React.createElement("th", null, "name"), 
@@ -14,6 +16,8 @@ var CurrentFilters = React.createClass({displayName: "CurrentFilters",
                 )
             ), 
             React.createElement("tbody", null)
+          )
+          )
           )
       )
     );
@@ -41,9 +45,10 @@ var NewFilter = React.createClass({displayName: "NewFilter",
 var OptionsBox = React.createClass({displayName: "OptionsBox",
   render: function() {
     return (
-      React.createElement("div", {id: "options", className: "col-lg-12"}, 
+      React.createElement("div", {id: "options"}, 
         React.createElement("h2", null, "Options"), 
-        React.createElement("div", {className: "col-lg-3"}, 
+          React.createElement("div", {className: "row"}, 
+          React.createElement("div", {className: "col-lg-9 form-inline"}, 
           "Check new defects every", 
         React.createElement("select", {className: "form-control", id: "frequency"}, 
           React.createElement("option", null, "10"), 
@@ -51,12 +56,10 @@ var OptionsBox = React.createClass({displayName: "OptionsBox",
           React.createElement("option", null, "60")
         ), 
         "second(s).", React.createElement("br", null)
+        )
         ), 
-        React.createElement("div", {className: "col-lg-7"}, 
           React.createElement(CurrentFilters, null), 
           React.createElement(NewFilter, null)
-        )
-        
       )
     );
   }
@@ -191,7 +194,7 @@ var Options = React.createClass({displayName: "Options",
   render: function() {
     var focusingOnList = JSON.parse(localStorage.focusingOn);
     return (
-      React.createElement("div", {className: "row"}, 
+      React.createElement("div", null, 
         React.createElement(Header, null), 
         React.createElement(OptionsBox, null), 
         React.createElement(FocusingOn, null), 

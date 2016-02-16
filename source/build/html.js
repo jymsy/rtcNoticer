@@ -5,7 +5,9 @@ var CurrentFilters = React.createClass({
     return (
     <section>
         <h2>Current filters:</h2>
-          <table className="table" id="filter">
+        <div className="row">
+          <div className="col-lg-6">
+          <table className="table table-bordered" id="filter">
             <thead>
                 <tr>
                     <th>name</th>
@@ -15,6 +17,8 @@ var CurrentFilters = React.createClass({
             </thead>
             <tbody></tbody>
           </table>
+          </div>
+          </div>
       </section>
     );
   }
@@ -41,9 +45,10 @@ var NewFilter = React.createClass({
 var OptionsBox = React.createClass({
   render: function() {
     return (
-      <div id="options" className="col-lg-12">
+      <div id="options">
         <h2>Options</h2>
-        <div className="col-lg-3">
+          <div className="row">
+          <div className="col-lg-9 form-inline">
           Check new defects every
         <select className="form-control" id="frequency">
           <option>10</option>
@@ -52,11 +57,9 @@ var OptionsBox = React.createClass({
         </select>
         second(s).<br/>
         </div>
-        <div className="col-lg-7">
+        </div>
           <CurrentFilters />
           <NewFilter />
-        </div>
-        
       </div>
     );
   }
@@ -191,7 +194,7 @@ var Options = React.createClass({
   render: function() {
     var focusingOnList = JSON.parse(localStorage.focusingOn);
     return (
-      <div className="row">
+      <div>
         <Header />
         <OptionsBox />
         <FocusingOn />
