@@ -41,17 +41,22 @@ var NewFilter = React.createClass({displayName: "NewFilter",
 var OptionsBox = React.createClass({displayName: "OptionsBox",
   render: function() {
     return (
-      React.createElement("div", {id: "options"}, 
+      React.createElement("div", {id: "options", className: "col-lg-12"}, 
         React.createElement("h2", null, "Options"), 
-        "Check new defects every", 
+        React.createElement("div", {className: "col-lg-3"}, 
+          "Check new defects every", 
         React.createElement("select", {className: "form-control", id: "frequency"}, 
           React.createElement("option", null, "10"), 
           React.createElement("option", null, "30"), 
           React.createElement("option", null, "60")
         ), 
-        "second(s).", React.createElement("br", null), 
-        React.createElement(CurrentFilters, null), 
-        React.createElement(NewFilter, null)
+        "second(s).", React.createElement("br", null)
+        ), 
+        React.createElement("div", {className: "col-lg-7"}, 
+          React.createElement(CurrentFilters, null), 
+          React.createElement(NewFilter, null)
+        )
+        
       )
     );
   }

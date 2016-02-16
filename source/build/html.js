@@ -41,17 +41,22 @@ var NewFilter = React.createClass({
 var OptionsBox = React.createClass({
   render: function() {
     return (
-      <div id="options">
+      <div id="options" className="col-lg-12">
         <h2>Options</h2>
-        Check new defects every
+        <div className="col-lg-3">
+          Check new defects every
         <select className="form-control" id="frequency">
           <option>10</option>
           <option>30</option>
           <option>60</option>
         </select>
         second(s).<br/>
-        <CurrentFilters />
-        <NewFilter />
+        </div>
+        <div className="col-lg-7">
+          <CurrentFilters />
+          <NewFilter />
+        </div>
+        
       </div>
     );
   }
