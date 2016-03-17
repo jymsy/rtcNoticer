@@ -1,4 +1,6 @@
-
+var listener = function (event) {
+    removeFilter(event.target.id);
+};
 
 function reloadFilter() {
     var currentFilter = JSON.parse(localStorage.filter);
@@ -7,7 +9,7 @@ function reloadFilter() {
 
     if (targets.length > 0) {
         for (var i = targets.length - 1; i >= 0; i--) {
-            targets[i].removeEventListener('click');
+            targets[i].removeEventListener('click', listener);
         }
     }
     filterTable.innerHTML="";
@@ -21,9 +23,7 @@ function reloadFilter() {
     targets = document.querySelectorAll('.delete_filter');
 
     for (var i = targets.length - 1; i >= 0; i--) {
-        targets[i].addEventListener('click', function(event) {
-            removeFilter(event.target.id);
-        });
+        targets[i].addEventListener('click', listener);
     }
     
 }
