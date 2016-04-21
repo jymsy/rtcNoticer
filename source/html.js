@@ -183,7 +183,7 @@ var FocusingOn = React.createClass({displayName: "FocusingOn",
     }.bind(this));
     return (
       React.createElement("div", {id: "focusingOn"}, 
-        React.createElement("h2", null, "Focusing On:"), 
+        React.createElement("h2", null, "Following:"), 
         React.createElement("ol", null, rows)
       )
     );

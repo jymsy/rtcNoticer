@@ -183,7 +183,7 @@ var FocusingOn = React.createClass({
     }.bind(this));
     return (
       <div id="focusingOn">
-        <h2>Focusing On:</h2>
+        <h2>Following:</h2>
         <ol>{rows}</ol>
       </div>
     );
