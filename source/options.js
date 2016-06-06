@@ -36,6 +36,7 @@ function removeFilter(filterId) {
     for (var i = currentFilter.length - 1; i >= 0; i--) {
         if (currentFilter[i].id == filterId) {
             deleteIndex = i;
+            break;
         }
     }
 
