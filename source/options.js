@@ -46,8 +46,6 @@ function removeFilter(filterId) {
 }
 
 window.addEventListener('load', function() {
-  var freq = document.querySelector('#frequency');
-  freq.value = localStorage.frequency;
 
   reloadFilter();
 
@@ -65,9 +63,5 @@ window.addEventListener('load', function() {
     name.value = "";
     id.value = "";
   });
-
-  freq.onchange = function() {
-    localStorage.frequency = freq.value;
-  };
 
 });

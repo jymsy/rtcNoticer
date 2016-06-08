@@ -43,6 +43,15 @@ var NewFilter = React.createClass({
 });
 
 var OptionsBox = React.createClass({
+  getInitialState: function() {
+    return {
+      freq: localStorage.frequency
+    };
+  },
+  handleChange: function(event) {
+    localStorage.frequency = event.target.value;
+    this.setState({freq:localStorage.frequency});
+  },
   render: function() {
     return (
       <div id="options">
@@ -50,7 +59,7 @@ var OptionsBox = React.createClass({
           <div className="row">
           <div className="col-lg-9 form-inline">
           Check new defects every
-        <select className="form-control" id="frequency">
+        <select className="form-control" id="frequency" value={this.state.freq} onChange={this.handleChange}>
           <option>10</option>
           <option>30</option>
           <option>60</option>
@@ -98,13 +107,13 @@ var TodayItems = React.createClass({
   },
   componentWillMount: function() {
     var message = {
-        type: "initItems"
+      type: "initItems"
     };
 
     chrome.runtime.sendMessage(message, function(items) {
-        if (items) {
-          this.setState({list:items});
-        }
+      if (items) {
+        this.setState({list:items});
+      }
     }.bind(this));
   },
   componentDidMount: function() {

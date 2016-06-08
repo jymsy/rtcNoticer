@@ -43,6 +43,15 @@ var NewFilter = React.createClass({displayName: "NewFilter",
 });
 
 var OptionsBox = React.createClass({displayName: "OptionsBox",
+  getInitialState: function() {
+    return {
+      freq: localStorage.frequency
+    };
+  },
+  handleChange: function(event) {
+    localStorage.frequency = event.target.value;
+    this.setState({freq:localStorage.frequency});
+  },
   render: function() {
     return (
       React.createElement("div", {id: "options"}, 
@@ -50,7 +59,7 @@ var OptionsBox = React.createClass({displayName: "OptionsBox",
           React.createElement("div", {className: "row"}, 
           React.createElement("div", {className: "col-lg-9 form-inline"}, 
           "Check new defects every", 
-        React.createElement("select", {className: "form-control", id: "frequency"}, 
+        React.createElement("select", {className: "form-control", id: "frequency", value: this.state.freq, onChange: this.handleChange}, 
           React.createElement("option", null, "10"), 
           React.createElement("option", null, "30"), 
           React.createElement("option", null, "60")
@@ -98,13 +107,13 @@ var TodayItems = React.createClass({displayName: "TodayItems",
   },
   componentWillMount: function() {
     var message = {
-        type: "initItems"
+      type: "initItems"
     };
 
     chrome.runtime.sendMessage(message, function(items) {
-        if (items) {
-          this.setState({list:items});
-        }
+      if (items) {
+        this.setState({list:items});
+      }
     }.bind(this));
   },
   componentDidMount: function() {
