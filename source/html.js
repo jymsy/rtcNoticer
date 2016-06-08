@@ -25,10 +25,13 @@ var CurrentFilters = React.createClass({displayName: "CurrentFilters",
 });
 
 var NewFilter = React.createClass({displayName: "NewFilter",
+  onSubmit: function(event) {
+    event.preventDefault();
+  },
   render: function() {
     var inputStyle = {width:'200px'};
     return (
-    React.createElement("form", {className: "form-inline"}, 
+    React.createElement("form", {className: "form-inline", onSubmit: this.onSubmit}, 
       "Add filter:", React.createElement("br", null), 
       React.createElement("div", {className: "form-group"}, 
         React.createElement("input", {id: "name", type: "text", className: "form-control", style: inputStyle, placeholder: "Name"})
@@ -36,30 +39,25 @@ var NewFilter = React.createClass({displayName: "NewFilter",
       React.createElement("div", {className: "form-group"}, 
         React.createElement("input", {id: "id", type: "text", className: "form-control", style: inputStyle, placeholder: "ID"})
       ), 
-      React.createElement("button", {className: "btn btn-primary", id: "add"}, "Add")
+      React.createElement("button", {className: "btn btn-primary", id: "add", type: "submit"}, "Add")
     )
     );
   }
 });
 
 var OptionsBox = React.createClass({displayName: "OptionsBox",
-  getInitialState: function() {
-    return {
-      freq: localStorage.frequency
-    };
-  },
   handleChange: function(event) {
     localStorage.frequency = event.target.value;
-    this.setState({freq:localStorage.frequency});
   },
   render: function() {
+    var freq = localStorage.frequency;
     return (
       React.createElement("div", {id: "options"}, 
         React.createElement("h2", null, "Options"), 
           React.createElement("div", {className: "row"}, 
           React.createElement("div", {className: "col-lg-9 form-inline"}, 
           "Check new defects every", 
-        React.createElement("select", {className: "form-control", id: "frequency", value: this.state.freq, onChange: this.handleChange}, 
+        React.createElement("select", {className: "form-control", id: "frequency", defaultValue: freq, onChange: this.handleChange}, 
           React.createElement("option", null, "10"), 
           React.createElement("option", null, "30"), 
           React.createElement("option", null, "60")

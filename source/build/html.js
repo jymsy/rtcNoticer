@@ -25,10 +25,13 @@ var CurrentFilters = React.createClass({
 });
 
 var NewFilter = React.createClass({
+  onSubmit: function(event) {
+    event.preventDefault();
+  },
   render: function() {
     var inputStyle = {width:'200px'};
     return (
-    <form className="form-inline">
+    <form className="form-inline" onSubmit={this.onSubmit}>
       Add filter:<br/>
       <div className="form-group">
         <input id="name" type="text" className="form-control" style={inputStyle} placeholder="Name"/>
@@ -36,30 +39,25 @@ var NewFilter = React.createClass({
       <div className="form-group">
         <input id="id" type="text" className="form-control" style={inputStyle} placeholder="ID"/>
       </div>
-      <button className="btn btn-primary" id="add">Add</button>
+      <button className="btn btn-primary" id="add" type="submit" >Add</button>
     </form>
     );
   }
 });
 
 var OptionsBox = React.createClass({
-  getInitialState: function() {
-    return {
-      freq: localStorage.frequency
-    };
-  },
   handleChange: function(event) {
     localStorage.frequency = event.target.value;
-    this.setState({freq:localStorage.frequency});
   },
   render: function() {
+    var freq = localStorage.frequency;
     return (
       <div id="options">
         <h2>Options</h2>
           <div className="row">
           <div className="col-lg-9 form-inline">
           Check new defects every
-        <select className="form-control" id="frequency" value={this.state.freq} onChange={this.handleChange}>
+        <select className="form-control" id="frequency" defaultValue={freq} onChange={this.handleChange}>
           <option>10</option>
           <option>30</option>
           <option>60</option>
