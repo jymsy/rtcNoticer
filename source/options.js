@@ -47,21 +47,21 @@ function removeFilter(filterId) {
 
 window.addEventListener('load', function() {
 
-  reloadFilter();
+  // reloadFilter();
 
-  document.querySelector('#add').addEventListener('click', function() {
-    var name = document.getElementById("name");
-    var id = document.getElementById("id");
+  // document.querySelector('#add').addEventListener('click', function() {
+  //   var name = document.getElementById("name");
+  //   var id = document.getElementById("id");
 
-    if (name.value != "" && id.value != "") {
-        var currentFilter = JSON.parse(localStorage.filter);
-        currentFilter.push({name: name.value, id:id.value, lastModifyDate:"1"});
-        localStorage.filter = JSON.stringify(currentFilter);
-        reloadFilter();
-    }
+  //   if (name.value != "" && id.value != "") {
+  //       // var currentFilter = JSON.parse(localStorage.filter);
+  //       // currentFilter.push({name: name.value, id:id.value, lastModifyDate:"1"});
+  //       // localStorage.filter = JSON.stringify(currentFilter);
+  //       reloadFilter();
+  //   }
 
-    name.value = "";
-    id.value = "";
-  });
+  //   // name.value = "";
+  //   // id.value = "";
+  // });
 
 });

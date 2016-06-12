@@ -1,7 +1,58 @@
 var item_url = 'https://swgjazz.ibm.com:8017/jazz/web/projects/Social%20CRM%20-%20Sales%20Force%20Automation#action=com.ibm.team.workitem.viewWorkItem&id=';
+var reloadFilterEvt = 'reload Filter';
+
+var FilterRow = React.createClass({displayName: "FilterRow",
+  handleClick: function() {
+    this.props.onDeleted(this.props.item);
+  },
+  render: function() {
+    return (
+      React.createElement("tr", null, 
+        React.createElement("td", null, this.props.item.name), 
+        React.createElement("td", null, this.props.item.id), 
+        React.createElement("td", null, React.createElement("button", {onClick: this.handleClick, className: "delete_filter btn btn-danger"}, "Delete"))
+      )
+    );
+  }
+});
 
 var CurrentFilters = React.createClass({displayName: "CurrentFilters",
+  getInitialState: function() {
+    var currentFilterList = JSON.parse(localStorage.filter);
+    return {
+      list: currentFilterList
+    };
+  },
+  componentDidMount: function() {
+    PubSub.subscribe(reloadFilterEvt, function(){
+      var currentFilterList = JSON.parse(localStorage.filter);
+      this.setState({list: currentFilterList});
+    }.bind(this));
+  },
+  componentWillUnmount: function() {
+    PubSub.unsubscribe(reloadFilterEvt);
+  },
+  handleDeleteFilter: function(filter) {
+    var deleteIndex;
+    var currentFilter = JSON.parse(localStorage.filter);
+
+    for (var i = currentFilter.length - 1; i >= 0; i--) {
+        if (currentFilter[i].id == filter.id) {
+            deleteIndex = i;
+            break;
+        }
+    }
+
+    currentFilter.splice(i,1);
+    localStorage.filter=JSON.stringify(currentFilter);
+    this.setState({list: currentFilter});
+  },
   render: function() {
+    console.log(this.state.list);
+    var rows = [];
+    this.state.list.forEach(function(item) {
+      rows.push(React.createElement(FilterRow, {item: item, onDeleted: this.handleDeleteFilter}));
+    }.bind(this));
     return (
     React.createElement("section", null, 
         React.createElement("h2", null, "Current filters:"), 
@@ -15,7 +66,7 @@ var CurrentFilters = React.createClass({displayName: "CurrentFilters",
                     React.createElement("th", null, "actions")
                 )
             ), 
-            React.createElement("tbody", null)
+            React.createElement("tbody", null, rows)
           )
           )
           )
@@ -27,6 +78,20 @@ var CurrentFilters = React.createClass({displayName: "CurrentFilters",
 var NewFilter = React.createClass({displayName: "NewFilter",
   onSubmit: function(event) {
     event.preventDefault();
+    var nameNode = this.refs.name.getDOMNode();
+    var idNode = this.refs.id.getDOMNode();
+    var name = nameNode.value.trim();
+    var id = idNode.value.trim();
+
+    if (name != "" && id != "") {
+        var currentFilter = JSON.parse(localStorage.filter);
+        currentFilter.push({name: name, id:id, lastModifyDate:"1"});
+        localStorage.filter = JSON.stringify(currentFilter);
+        // reloadFilter();
+        PubSub.publish(reloadFilterEvt);
+    }
+    nameNode.value = "";
+    idNode.value = "";
   },
   render: function() {
     var inputStyle = {width:'200px'};
@@ -34,10 +99,10 @@ var NewFilter = React.createClass({displayName: "NewFilter",
     React.createElement("form", {className: "form-inline", onSubmit: this.onSubmit}, 
       "Add filter:", React.createElement("br", null), 
       React.createElement("div", {className: "form-group"}, 
-        React.createElement("input", {id: "name", type: "text", className: "form-control", style: inputStyle, placeholder: "Name"})
+        React.createElement("input", {id: "name", type: "text", ref: "name", className: "form-control", style: inputStyle, placeholder: "Name"})
       ), 
       React.createElement("div", {className: "form-group"}, 
-        React.createElement("input", {id: "id", type: "text", className: "form-control", style: inputStyle, placeholder: "ID"})
+        React.createElement("input", {id: "id", type: "text", ref: "id", className: "form-control", style: inputStyle, placeholder: "ID"})
       ), 
       React.createElement("button", {className: "btn btn-primary", id: "add", type: "submit"}, "Add")
     )
@@ -175,13 +240,12 @@ var FocusingOn = React.createClass({displayName: "FocusingOn",
     this.setState({list: focusingOnList});
   },
   componentDidMount: function() {
-    var self = this;
     chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
       if(message.type == "addFocusingOn"){
         var focusingOnList = JSON.parse(localStorage.focusingOn);
         self.setState({list: focusingOnList});
       }
-    });
+    }.bind(this));
   },
   render: function() {
     var rows = [];
