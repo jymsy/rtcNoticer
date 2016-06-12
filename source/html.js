@@ -48,7 +48,6 @@ var CurrentFilters = React.createClass({displayName: "CurrentFilters",
     this.setState({list: currentFilter});
   },
   render: function() {
-    console.log(this.state.list);
     var rows = [];
     this.state.list.forEach(function(item) {
       rows.push(React.createElement(FilterRow, {item: item, onDeleted: this.handleDeleteFilter}));
@@ -87,7 +86,6 @@ var NewFilter = React.createClass({displayName: "NewFilter",
         var currentFilter = JSON.parse(localStorage.filter);
         currentFilter.push({name: name, id:id, lastModifyDate:"1"});
         localStorage.filter = JSON.stringify(currentFilter);
-        // reloadFilter();
         PubSub.publish(reloadFilterEvt);
     }
     nameNode.value = "";
@@ -99,12 +97,12 @@ var NewFilter = React.createClass({displayName: "NewFilter",
     React.createElement("form", {className: "form-inline", onSubmit: this.onSubmit}, 
       "Add filter:", React.createElement("br", null), 
       React.createElement("div", {className: "form-group"}, 
-        React.createElement("input", {id: "name", type: "text", ref: "name", className: "form-control", style: inputStyle, placeholder: "Name"})
+        React.createElement("input", {type: "text", ref: "name", className: "form-control", style: inputStyle, placeholder: "Name"})
       ), 
       React.createElement("div", {className: "form-group"}, 
-        React.createElement("input", {id: "id", type: "text", ref: "id", className: "form-control", style: inputStyle, placeholder: "ID"})
+        React.createElement("input", {type: "text", ref: "id", className: "form-control", style: inputStyle, placeholder: "ID"})
       ), 
-      React.createElement("button", {className: "btn btn-primary", id: "add", type: "submit"}, "Add")
+      React.createElement("button", {className: "btn btn-primary", type: "submit"}, "Add")
     )
     );
   }
@@ -122,7 +120,7 @@ var OptionsBox = React.createClass({displayName: "OptionsBox",
           React.createElement("div", {className: "row"}, 
           React.createElement("div", {className: "col-lg-9 form-inline"}, 
           "Check new defects every", 
-        React.createElement("select", {className: "form-control", id: "frequency", defaultValue: freq, onChange: this.handleChange}, 
+        React.createElement("select", {className: "form-control", defaultValue: freq, onChange: this.handleChange}, 
           React.createElement("option", null, "10"), 
           React.createElement("option", null, "30"), 
           React.createElement("option", null, "60")

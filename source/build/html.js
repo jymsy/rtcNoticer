@@ -48,7 +48,6 @@ var CurrentFilters = React.createClass({
     this.setState({list: currentFilter});
   },
   render: function() {
-    console.log(this.state.list);
     var rows = [];
     this.state.list.forEach(function(item) {
       rows.push(<FilterRow item={item} onDeleted={this.handleDeleteFilter} />);
@@ -87,7 +86,6 @@ var NewFilter = React.createClass({
         var currentFilter = JSON.parse(localStorage.filter);
         currentFilter.push({name: name, id:id, lastModifyDate:"1"});
         localStorage.filter = JSON.stringify(currentFilter);
-        // reloadFilter();
         PubSub.publish(reloadFilterEvt);
     }
     nameNode.value = "";
@@ -99,12 +97,12 @@ var NewFilter = React.createClass({
     <form className="form-inline" onSubmit={this.onSubmit}>
       Add filter:<br/>
       <div className="form-group">
-        <input id="name" type="text" ref="name" className="form-control" style={inputStyle} placeholder="Name"/>
+        <input type="text" ref="name" className="form-control" style={inputStyle} placeholder="Name"/>
       </div>
       <div className="form-group">
-        <input id="id" type="text" ref="id" className="form-control" style={inputStyle} placeholder="ID"/>
+        <input type="text" ref="id" className="form-control" style={inputStyle} placeholder="ID"/>
       </div>
-      <button className="btn btn-primary" id="add" type="submit" >Add</button>
+      <button className="btn btn-primary" type="submit" >Add</button>
     </form>
     );
   }
@@ -122,7 +120,7 @@ var OptionsBox = React.createClass({
           <div className="row">
           <div className="col-lg-9 form-inline">
           Check new defects every
-        <select className="form-control" id="frequency" defaultValue={freq} onChange={this.handleChange}>
+        <select className="form-control" defaultValue={freq} onChange={this.handleChange}>
           <option>10</option>
           <option>30</option>
           <option>60</option>
