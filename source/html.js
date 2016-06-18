@@ -127,9 +127,8 @@ var OptionsBox = React.createClass({displayName: "OptionsBox",
         ), 
         "second(s).", React.createElement("br", null)
         )
-        ), 
-          React.createElement(CurrentFilters, null), 
-          React.createElement(NewFilter, null)
+        )
+         
       )
     );
   }
@@ -266,6 +265,8 @@ var Options = React.createClass({displayName: "Options",
       React.createElement("div", null, 
         React.createElement(Header, null), 
         React.createElement(OptionsBox, null), 
+         React.createElement(CurrentFilters, null), 
+          React.createElement(NewFilter, null), 
         React.createElement(FocusingOn, null), 
         React.createElement(TodayItems, null)
       )

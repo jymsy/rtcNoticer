@@ -128,8 +128,7 @@ var OptionsBox = React.createClass({
         second(s).<br/>
         </div>
         </div>
-          <CurrentFilters />
-          <NewFilter />
+         
       </div>
     );
   }
@@ -266,6 +265,8 @@ var Options = React.createClass({
       <div>
         <Header />
         <OptionsBox />
+         <CurrentFilters />
+          <NewFilter />
         <FocusingOn />
         <TodayItems />
       </div>
